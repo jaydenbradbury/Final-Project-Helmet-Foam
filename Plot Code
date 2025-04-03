@@ -29,3 +29,23 @@ df_clean %>%
     color = "Foam (Porosity)"
   ) +
   theme_minimal()
+
+```{r}
+ggplot(df_clean, aes(x = factor(ChemIndex), fill = factor(ChemIndex))) +
+  geom_bar() +
+  labs(title = "Count of Each Foam Type",
+       x = "Foam Type",
+       y = "Count") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+```{r}
+ggplot(df_clean, aes(x = factor(Porosity), fill = factor(Porosity))) +
+  geom_bar() +
+  labs(title = "Count of Each Foam Type",
+       x = "Foam Type",
+       y = "Count") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
