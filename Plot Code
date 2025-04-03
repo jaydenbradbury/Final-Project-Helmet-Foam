@@ -77,3 +77,34 @@ ggplot(df_clean, aes(x = factor(Porosity), fill = factor(Porosity))) +
   cor(use = "complete.obs")
 
 ```
+```{r}
+df_clean %>%
+  group_by(ChemIndex, tandelta) %>%
+  summarise(mean_Estatic = mean(Estatic_MPA, na.rm = TRUE), .groups = "drop") %>%
+  ggplot(aes(x = tandelta, y = mean_Estatic, color = factor(ChemIndex), group = ChemIndex)) +
+  geom_line(size = 1.2) +
+  geom_point(size = 2) +
+  labs(
+    title = "Estatic_MPA vs. tan delta by Foam Type",
+    x = "tan delta",
+    y = "Mean Estatic_MPA",
+    color = "Foam (chemindex)"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+df_clean %>%
+  group_by(Porosity, tandelta) %>%
+  summarise(mean_Estatic = mean(Estatic_MPA, na.rm = TRUE), .groups = "drop") %>%
+  ggplot(aes(x = tandelta, y = mean_Estatic, color = factor(Porosity), group = Porosity)) +
+  geom_line(size = 1.2) +
+  geom_point(size = 2) +
+  labs(
+    title = "Estatic_MPA vs. tan delta by Foam Type",
+    x = "tan delta",
+    y = "Mean Estatic_MPA",
+    color = "Foam (porosity)"
+  ) +
+  theme_minimal()
+```
