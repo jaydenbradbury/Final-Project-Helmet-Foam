@@ -45,3 +45,8 @@ df_clean <- df_lt %>%
   filter(!is.na(Time)) %>%
   select(-Cycle) %>%                #Drop the existing "Cycle" column and rename
   rename(Cycle = Cycle_column)  
+
+df_clean <- df_clean |>
+  mutate(
+    ChemIndex = as.numeric(str_split_fixed(SampleCode, "_", 4)[,2]),
+    Porosity = as.numeric(str_split_fixed(SampleCode, "_", 4)[,3]))
