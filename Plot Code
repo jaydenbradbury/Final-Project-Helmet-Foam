@@ -1,3 +1,4 @@
+#THIS IS THE PLOT FOR CHEMINDEX CHANGE IN ESTATIC OVER TIME (CYCLES)
 # Plot with group average lines by chemindex
 df_clean %>%
   group_by(ChemIndex, Cycle) %>%
@@ -10,5 +11,21 @@ df_clean %>%
     x = "Cycle",
     y = "Mean Estatic_MPA",
     color = "Foam (chemindex)"
+  ) +
+  theme_minimal()
+
+#THIS IS THE PLOT FOR POROSITY CHANGE IN ESTATIC OVER TIME (CYCLES)
+# Plot with group average lines by porosity
+df_clean %>%
+  group_by(Porosity, Cycle) %>%
+  summarise(mean_Estatic = mean(Estatic_MPA, na.rm = TRUE), .groups = "drop") %>%
+  ggplot(aes(x = Cycle, y = mean_Estatic, color = factor(Porosity), group = Porosity)) +
+  geom_line(size = 1.2) +
+  geom_point(size = 2) +
+  labs(
+    title = "Estatic_MPA Across Cycles by Porosity",
+    x = "Cycle",
+    y = "Mean Estatic_MPA",
+    color = "Foam (Porosity)"
   ) +
   theme_minimal()
