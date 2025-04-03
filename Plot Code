@@ -108,3 +108,24 @@ df_clean %>%
   ) +
   theme_minimal()
 ```
+
+```{r}
+df_clean %>%
+  group_by(ChemIndex, Porosity, tandelta) %>%
+  summarise(mean_Estatic = mean(Estatic_MPA, na.rm = TRUE), .groups = "drop") %>%
+  ggplot(aes(
+    x = tandelta,
+    y = mean_Estatic,
+    group = interaction(ChemIndex, Porosity),
+    color = interaction(ChemIndex, Porosity)
+  )) +
+  geom_line(size = 1.2) +
+  geom_point(size = 2) +
+  labs(
+    title = "Estatic_MPA Across tandeltas by Foam Type and Porosity",
+    x = "tandelta",
+    y = "Mean Estatic_MPA",
+    color = "chemindex / Porosity"
+  ) +
+  theme_minimal()
+```
