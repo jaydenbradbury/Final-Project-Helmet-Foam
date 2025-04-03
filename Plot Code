@@ -70,3 +70,10 @@ ggplot(df_clean, aes(x = factor(Porosity), fill = factor(Porosity))) +
   theme_minimal() +
   theme(legend.position = "none")
 ```
+```{r}
+## corr matrix for estatic mpa, tan delta (damping), and NVP
+ df_clean %>%
+  select(Estatic_MPA, tandelta, NVP) %>%
+  cor(use = "complete.obs")
+
+```
