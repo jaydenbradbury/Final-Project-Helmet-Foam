@@ -1,0 +1,14 @@
+# Plot with group average lines by chemindex
+df_clean %>%
+  group_by(ChemIndex, Cycle) %>%
+  summarise(mean_Estatic = mean(Estatic_MPA, na.rm = TRUE), .groups = "drop") %>%
+  ggplot(aes(x = Cycle, y = mean_Estatic, color = factor(ChemIndex), group = ChemIndex)) +
+  geom_line(size = 1.2) +
+  geom_point(size = 2) +
+  labs(
+    title = "Estatic_MPA Across Cycles by Foam Type",
+    x = "Cycle",
+    y = "Mean Estatic_MPA",
+    color = "Foam (chemindex)"
+  ) +
+  theme_minimal()
