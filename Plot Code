@@ -149,3 +149,24 @@ df_clean %>%
   ) +
   theme_minimal()
 ```
+
+```{r}
+df_stability <- df_clean %>%
+  group_by(ChemIndex, Porosity) %>%
+  summarise(
+    sd_Estatic = sd(Estatic_MPA, na.rm = TRUE),  # measures variation
+    range_Estatic = max(Estatic_MPA, na.rm = TRUE) - min(Estatic_MPA, na.rm = TRUE),  # another stability metric
+    .groups = "drop"
+  ) %>%
+  arrange(sd_Estatic)
+
+ggplot(df_stability, aes(x = factor(ChemIndex), y = sd_Estatic, fill = factor(Porosity))) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(
+    title = "Standard Deviation of Static Stiffness by Foam Type and Porosity",
+    x = "Chemical Index",
+    y = "SD of Estatic_MPA (lower = more stable)",
+    fill = "Porosity"
+  ) +
+  theme_minimal()
+```
