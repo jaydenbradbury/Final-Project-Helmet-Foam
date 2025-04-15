@@ -12,22 +12,68 @@ df <- read.csv("clean_data.csv")
 
 ```{r}
 head(df)
+df <- df%>% filter(Cycle != "A")
 ```
 
 ```{r}
-ggplot(df, aes(y = Estatic_MPA, x = Porosity)) + 
+ggplot(df, aes(y = Estatic_rel, x = Porosity)) + 
   geom_boxplot()
 
 ```
 
 ```{r}
- ggplot(df, aes(y = Estatic_MPA, x = ChemIndex)) + 
+ ggplot(df, aes(y = Estatic_rel, x = ChemIndex)) + 
   geom_boxplot()
 ```
 ```{r}
 
-ggplot()
+ggplot(df, aes(
+    x = Time,
+    y = Estatic_rel,
+    group = interaction(ChemIndex, Porosity),
+    color = interaction(ChemIndex, Porosity)
+  )) +
+geom_point(size = 2) +
+  labs(
+    title = "Estatic_rel Across Time by Foam Type and Porosity",
+    x = "Time",
+    y = "Standardized Estatic Stange",
+    color = "chemindex / Porosity"
+  ) +
+  theme_minimal()
 
 ```
+```{r}
+ggplot(df, aes(x = ChemIndex, y = Estatic_rel, fill = Porosity)) +
+  geom_boxplot(position = position_dodge(width = 0.8)) +
+  labs(title = "Estatic_rel by ChemIndex and Porosity",
+       x = "ChemIndex",
+       y = "Estatic_rel") +
+  theme_minimal()
+```
+
+```{r}
+ggplot(df, aes(
+    x = Relporo,
+    y = Estatic_rel,
+    group = interaction(ChemIndex, Porosity),
+    color = interaction(ChemIndex, Porosity)
+  )) +
+geom_point(size = 2) +
+  labs(
+    title = "Estatic_rel Across Time by Foam Type and Porosity",
+    x = "Time",
+    y = "Standardized Estatic Stange",
+    color = "chemindex / Porosity"
+  ) +
+  theme_minimal()
+```
+
+$$
+\widehat{\text{Estatic_relative}} = strain + stress + relporo + amplitute + time + Porosity*ChemIndex + \epsilon\\
+
+a_i = \alpha _0 + \alpha_1 (Strain) + \alpha_2 (Stress) + \alpha_3(Relporo) + \alpha_4(amplitude) + \alpha_5 I (Porosity * ChemIndex) + u_i \\
+b_i = \beta _0 + \beta_1 (Strain) + \beta_2 (Stress) + \beta_3(Relporo) + \beta_4(amplitude) + \beta_5 I (Porosity * ChemIndex) + v_i \\
 
 
+$$
