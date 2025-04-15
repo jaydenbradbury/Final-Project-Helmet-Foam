@@ -15,13 +15,19 @@ head(df)
 ```
 
 ```{r}
-ggplot(df, aes(x = Estatic_MPA, y = Time, Color = ChemIndex, group = factor(Porosity)))+
-  geom_line(aes(group = factor(Porosity)))
+ggplot(df, aes(y = Estatic_MPA, x = Porosity)) + 
+  geom_boxplot()
 
 ```
 
 ```{r}
-ggplot(d)
+ ggplot(df, aes(y = Estatic_MPA, x = ChemIndex)) + 
+  geom_boxplot()
+```
+```{r}
+
+ggplot()
+
 ```
 
 

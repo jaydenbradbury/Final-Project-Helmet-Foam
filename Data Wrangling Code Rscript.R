@@ -78,4 +78,25 @@ df_clean$Porosity <- factor(df_clean$Porosity, levels = c("Low", "High"))
 
 df_clean$ChemIndex <- factor(df_clean$ChemIndex, levels = c("Low", "Medium", "High"))
 
+df_clean <- df_clean %>%
+  mutate(Cycle = case_when(
+    Cycle == "Cyc_A" ~ "A",
+    Cycle == "Cyc_B" ~ "B",
+    Cycle == "Cyc_C" ~ "C",
+    Cycle == "Cyc_D" ~ "D",
+    Cycle == "Cyc_E" ~ "E",
+    Cycle == "Cyc_F" ~ "F",
+    Cycle == "Cyc_G" ~ "G",
+    Cycle == "Cyc_H" ~ "H",
+    Cycle == "Cyc_I" ~ "I",
+    Cycle == "Cyc_J" ~ "J",
+    Cycle == "Cyc_K" ~ "K",
+    Cycle == "Cyc_L" ~ "L",
+    Cycle == "Cyc_M" ~ "M",
+    Cycle == "Cyc_N" ~ "N"
+  ))
+
+df_clean$Cycle <- factor(df_clean$Cycle,
+                         levels = c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N"))
+
 write.csv(df_clean, file = "clean_data.csv")
