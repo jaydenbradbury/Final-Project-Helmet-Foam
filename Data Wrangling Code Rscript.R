@@ -50,7 +50,8 @@ df_clean <- df_clean |>
   mutate(
     ChemIndex = as.numeric(str_split_fixed(SampleCode, "_", 4)[,2]),
     Porosity = as.numeric(str_split_fixed(SampleCode, "_", 4)[,3]))
-    
+
 #remove response variables
 
 df_clean_noresponse <- subset(df_clean, select = (-c("E1_MPA", "tandelta", "NVP")
+                                                  
