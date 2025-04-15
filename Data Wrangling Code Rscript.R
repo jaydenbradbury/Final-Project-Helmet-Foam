@@ -51,7 +51,15 @@ df_clean <- df_clean |>
     ChemIndex = as.numeric(str_split_fixed(SampleCode, "_", 4)[,2]),
     Porosity = as.numeric(str_split_fixed(SampleCode, "_", 4)[,3]))
 
-#remove response variables
+df_clean <- df_clean %>%
+  group_by(SampleCode) %>%
+  mutate(
+    Estatic_initial = first(Estatic_MPA),  # First Estatic value per SampleCode
+    Estatic_rel = Estatic_MPA / Estatic_initial  # Relative to initial
+  ) %>%
+  ungroup()
 
-df_clean_noresponse <- subset(df_clean, select = (-c("E1_MPA", "tandelta", "NVP")
+df_clean_noresponse <- subset(df_clean, select = (-c(E1_MPA, tandelta, NVP)))
+
+df_clean_noresponse <-
                                                   
