@@ -1,0 +1,27 @@
+---
+title: "EDA_Thieman"
+format: html
+editor: visual
+---
+
+```{r, warning=FALSE}
+library(tidyverse)
+library(ggplot2)
+df <- read.csv("clean_data.csv")
+```
+
+```{r}
+head(df)
+```
+
+```{r}
+ggplot(df, aes(x = Estatic_MPA, y = Time, Color = ChemIndex, group = factor(Porosity)))+
+  geom_line(aes(group = factor(Porosity)))
+
+```
+
+```{r}
+ggplot(d)
+```
+
+
