@@ -99,4 +99,7 @@ df_clean <- df_clean %>%
 df_clean$Cycle <- factor(df_clean$Cycle,
                          levels = c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N"))
 
+df_clean <- df_clean %>%
+  filter(Time <= 10000)
+
 write.csv(df_clean, file = "clean_data.csv")
