@@ -50,3 +50,11 @@ df_clean <- df_clean |>
   mutate(
     ChemIndex = as.numeric(str_split_fixed(SampleCode, "_", 4)[,2]),
     Porosity = as.numeric(str_split_fixed(SampleCode, "_", 4)[,3]))
+
+df_clean <- df_clean %>%
+  group_by(SampleCode) %>%
+  mutate(
+    Estatic_initial = first(Estatic_MPA),  # First Estatic value per SampleCode
+    Estatic_rel = Estatic_MPA / Estatic_initial  # Relative to initial
+  ) %>%
+  ungroup()
