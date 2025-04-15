@@ -59,7 +59,23 @@ df_clean <- df_clean %>%
   ) %>%
   ungroup()
 
-df_clean_noresponse <- subset(df_clean, select = (-c(E1_MPA, tandelta, NVP)))
+df_clean <- subset(df_clean, select = (-c(E1_MPA, tandelta, NVP)))
 
-df_clean_noresponse <-
-                                                  
+df_clean <- df_clean %>%
+  mutate(Porosity = case_when(
+    Porosity == 71 ~ "Low",
+    Porosity == 81 ~ "High"
+  ))
+
+df_clean <- df_clean %>%
+  mutate(ChemIndex = case_when(
+    ChemIndex == 121 ~ "High",
+    ChemIndex == 100 ~ "Medium",
+    ChemIndex == 79 ~ "Low"
+  ))
+
+df_clean$Porosity <- factor(df_clean$Porosity, levels = c("Low", "High"))
+
+df_clean$ChemIndex <- factor(df_clean$ChemIndex, levels = c("Low", "Medium", "High"))
+
+write.csv(df_clean, file = "clean_data.csv")
