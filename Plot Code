@@ -170,3 +170,96 @@ ggplot(df_stability, aes(x = factor(ChemIndex), y = sd_Estatic, fill = factor(Po
   ) +
   theme_minimal()
 ```
+```{r}
+ggplot(df_clean, aes(x = Cycle, y = Estatic_rel, color = amp)) +
+  geom_line(aes(group = SampleCode), alpha = 0.4) +
+  geom_smooth(method = "loess", se = FALSE, linewidth = 1.2) +
+  facet_grid(Porosity ~ ChemIndex) +
+  labs(
+    title = "Effect of Amplitude on Estatic_rel Over Time",
+    x = "Cycle",
+    y = "Relative Static Stiffness (Estatic_rel)",
+    color = "Amplitude"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+ggplot(df_clean, aes(x = Cycle, y = Estatic_rel, color = freq)) +
+  geom_line(aes(group = SampleCode), alpha = 0.4) +
+  geom_smooth(method = "loess", se = FALSE, linewidth = 1.2) +
+  facet_grid(Porosity ~ ChemIndex) +
+  labs(
+    title = "Effect of Frequency on Estatic_rel Over Time",
+    x = "Cycle",
+    y = "Relative Static Stiffness (Estatic_rel)",
+    color = "Frequency"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+ggplot(df_clean, aes(x = Cycle, y = Estatic_rel, color = Relporo)) +
+  geom_line(aes(group = SampleCode), alpha = 0.4) +
+  geom_smooth(method = "loess", se = FALSE, linewidth = 1.2) +
+  facet_grid(Porosity ~ ChemIndex) +
+  labs(
+    title = "Effect of Relative Porosity on Estatic_rel Over Time",
+    x = "Cycle",
+    y = "Relative Static Stiffness (Estatic_rel)",
+    color = "Relative Porosity"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+ggplot(df_clean, aes(x = Cycle, y = Estatic_rel, color = Stress_kPa)) +
+  geom_line(aes(group = SampleCode), alpha = 0.4) +
+  geom_smooth(method = "loess", se = FALSE, linewidth = 1.2) +
+  facet_grid(Porosity ~ ChemIndex) +
+  labs(
+    title = "Effect of stress on Estatic_rel Over Time",
+    x = "Cycle",
+    y = "Relative Static Stiffness (Estatic_rel)",
+    color = "Stress"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+ggplot(df_clean, aes(x = Cycle, y = Estatic_rel, color = strain)) +
+  geom_line(aes(group = SampleCode), alpha = 0.4) +
+  geom_smooth(method = "loess", se = FALSE, linewidth = 1.2) +
+  facet_grid(Porosity ~ ChemIndex) +
+  labs(
+    title = "Effect of strain on Estatic_rel Over Time",
+    x = "Cycle",
+    y = "Relative Static Stiffness (Estatic_rel)",
+    color = "strain"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+ggplot(df_clean, aes(x = Cycle, y = Estatic_rel)) +
+  geom_line(aes(group = SampleCode), alpha = 0.4) +
+  geom_smooth(method = "loess", se = FALSE, linewidth = 1.2) +
+  labs(
+    title = "Estatic_relative over time",
+    x = "Cycle",
+    y = "Relative Static Stiffness (Estatic_rel)",
+  ) +
+  theme_minimal()
+```
+
+```{r}
+ggplot(df_clean, aes(x = Cycle, y = sqrt(Estatic_rel))) +
+  geom_line(aes(group = SampleCode), alpha = 0.4) +
+  geom_smooth(method = "loess", se = FALSE, linewidth = 1.2) +
+  labs(
+    title = "Estatic_relative over time",
+    x = "Cycle",
+    y = "Relative Static Stiffness (Estatic_rel)",
+  ) +
+  theme_minimal()
+```
