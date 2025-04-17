@@ -37,12 +37,12 @@ df_lt <- df_tidy %>%
   pivot_longer(
     cols = matches("^Cyc_[A-Z]$"),  # Cyc_A to Cyc_N
     names_to = "Cycle_column",      # Temporary name to avoid collision
-    values_to = "Time"
+    values_to = "num_squish"
   )
 
 #Remove NA times
 df_clean <- df_lt %>%
-  filter(!is.na(Time)) %>%
+  filter(!is.na(num_squish)) %>%
   select(-Cycle) %>%                #Drop the existing "Cycle" column and rename
   rename(Cycle = Cycle_column)  
 
@@ -100,6 +100,6 @@ df_clean$Cycle <- factor(df_clean$Cycle,
                          levels = c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N"))
 
 df_clean <- df_clean %>%
-  filter(Time <= 10000)
+  filter(num_squish <= 10000)
 
 write.csv(df_clean, file = "clean_data.csv")
