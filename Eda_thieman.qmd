@@ -82,12 +82,36 @@ Y_{ij} = (\alpha _0 + \alpha_1 (Strain) + \alpha_2 (Stress) + \alpha_3(Relporo) 
 $$
 ```{r}
 
-#First_model <- lmer(Estatic_rel ~  Stress_kPa  + freq + amp + Time + Porosity*ChemIndex + Stress_kPa*Porosity + (1|SampleCode), data = df)
+First_model <- lmer(Estatic_rel ~  Stress_kPa  + freq + num_squish + Porosity*ChemIndex + amp*ChemIndex + freq * num_squish + (1|SampleCode), data = df)
 
-#summary(First_model)
+summary(First_model)
 
 library(nlme)
-m1 <- lme(Estatic_rel ~  Stress_kPa  + freq + num_squish + Cycle + Porosity*ChemIndex + amp*ChemIndex + freq * num_squish ,random=~1|SampleCode,data=df)
+m1 <- lme(Estatic_rel ~  Stress_kPa + freq + num_squish + Porosity*ChemIndex  + freq * num_squish ,random=~1|SampleCode,data=df)
 anova(m1)
+
+
+```
+```{r}
+library(ggeffects)
+
+# Get predicted values for num_squish across Porosity and ChemIndex
+preds <- ggpredict(First_model, terms = c("num_squish", "Porosity", "ChemIndex"))
+ggplot(preds, aes(x = x, y = predicted)) +
+  geom_line(color = "steelblue", size = 1) +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), fill = "steelblue", alpha = 0.2) +
+  facet_wrap(~interaction(group, facet), ncol = 2) +  # 2 columns, change as needed
+  labs(
+    x = "Number of Squish",
+    y = "Predicted Estatic_rel",
+    title = "Predicted Estatic_rel by num_squish across Porosity x ChemIndex",
+    subtitle = "Each panel is a Porosity × ChemIndex combination"
+  ) +
+  theme_minimal(base_size = 14)
+
+```
+```{r}
+ggplot(df, aes(y = Estatic_rel, x = num_squish, group))+
+  geom_point(aes(x = num_squish, group = interaction(ChemIndex, Porosity)), color = interaction(ChemIndex, Porosity))
 ```
 
