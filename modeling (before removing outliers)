@@ -1,0 +1,31 @@
+```{r}
+library(nlme)
+
+st_stiff_model <- lmer(Estatic_rel ~ Stress_kPa + freq + Num_squish +
+            Num_squish:Porosity*ChemIndex + amp*ChemIndex + 
+            freq*Num_squish + (Num_squish|SampleCode),
+                       data = df_clean)
+summary(st_stiff_model)
+
+m1 <- lme(Estatic_rel ~ Stress_kPa + freq + Num_squish +
+            Num_squish:Porosity*ChemIndex + amp*ChemIndex + 
+            freq*Num_squish, random = ~Num_squish|SampleCode, data = df_clean)
+anova(m1)
+
+```
+
+```{r}
+qqnorm(residuals(st_stiff_model),
+       main = "Normal Q-Q Plot: Residuals")
+qqline(residuals(st_stiff_model), col = "red")
+
+qqnorm(ranef(st_stiff_model)$SampleCode[[1]],
+       main = "Normal Q-Q Plot: Random Intercepts")  
+qqline(ranef(st_stiff_model)$SampleCode[[1]], col = "red")
+
+qqnorm(ranef(st_stiff_model)$SampleCode[[2]],
+       main = "Normal Q-Q Plot: Random Slopes")  
+qqline(ranef(st_stiff_model)$SampleCode[[2]], col = "red")
+
+hist(residuals(st_stiff_model))
+```
