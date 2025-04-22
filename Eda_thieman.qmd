@@ -11,7 +11,7 @@ library(lme4)
 df <- read.csv("clean_data.csv")
 
 df <- df %>%
-  mutate(Time = freq*num_squish)
+  mutate(Time = num_squish/freq)
 ```
 
 ```{r}
