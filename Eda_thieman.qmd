@@ -9,6 +9,9 @@ library(tidyverse)
 library(ggplot2)
 library(lme4)
 df <- read.csv("clean_data.csv")
+
+df <- df %>%
+  mutate(Time = freq*num_squish)
 ```
 
 ```{r}
@@ -55,7 +58,7 @@ ggplot(df, aes(x = ChemIndex, y = Estatic_rel, fill = Porosity)) +
 
 ```{r}
 ggplot(df, aes(
-    x = Relporo,
+    x = Time,
     y = Estatic_rel,
     group = interaction(ChemIndex, Porosity),
     color = interaction(ChemIndex, Porosity)
@@ -73,21 +76,21 @@ geom_point(size = 2) +
 $$
 \widehat{\text{Estatic_relative}} = strain + stress + relporo + amplitute + time + Porosity*ChemIndex + \epsilon\\
 
-a_i = \alpha _0 + \alpha_1 (Strain) + \alpha_2 (Stress) + \alpha_3(Relporo) + \alpha_4(amplitude) + \alpha_5 (Frequency) + \alpha_6 I (Porosity * ChemIndex) + u_i \\
-b_i = \beta _0 + \beta_1 (Strain) + \beta_2 (Stress) + \beta_3(Relporo) + \beta_4(amplitude) + \beta_5 (Frequency) + \beta_6 I (Porosity * ChemIndex) + v_i \\
+a_i = \alpha _0 + \alpha_1 (Stress) + \alpha_2 (Frequency) + \alpha_3 (Number Squish) + \alpha_4 I (Porosity * ChemIndex) + \alpha_5 (amp*ChemIndex) + \alpha_6 ( freq * num_squish) + u_i \\
+b_i = \beta _0 + \beta_1 (Stress) + \beta_2 (Frequency) + \beta_3 (Number Squish) + \beta_I (Porosity * ChemIndex) + \beta_5 (amp*ChemIndex) + \beta_6 ( freq * num_squish) + v_i \\
 
-Y_{ij} = (\alpha _0 + \alpha_1 (Strain) + \alpha_2 (Stress) + \alpha_3(Relporo) + \alpha_4(amplitude) + \alpha_5 (Frequency) + \alpha_6 I (Porosity * ChemIndex) + u_i) + (\beta _0 + \beta_1 (Strain) + \beta_2 (Stress) + \beta_3(Relporo) + \beta_4(amplitude) + \beta_5 (Frequency) + \beta_6 I (Porosity * ChemIndex) + v_i)(Time) + \epsilon_i
+Y_{ij} = (\alpha _0 + \alpha_1 (Stress) + \alpha_2 (Frequency) + \alpha_3 (Number Squish) + \alpha_4 I (Porosity * ChemIndex) + \alpha_5 (amp*ChemIndex) + \alpha_6 ( freq * num_squish) + u_i) + (\beta _0 + \beta_1 (Stress) + \beta_2 (Frequency) + \beta_3 (Number Squish) + \beta_I (Porosity * ChemIndex) + \beta_5 (amp*ChemIndex) + \beta_6 ( freq * num_squish) + v_i)(Time) + \epsilon_i
 
 
 $$
 ```{r}
 
-First_model <- lmer(Estatic_rel ~  Stress_kPa  + freq + num_squish + Porosity*ChemIndex + amp*ChemIndex + freq * num_squish + (1|SampleCode), data = df)
+First_model <- lmer(Estatic_rel ~  Stress_kPa + freq + num_squish + num_squish:Porosity*ChemIndex + amp*ChemIndex + Time + (Time|SampleCode), data = df)
 
 summary(First_model)
 
 library(nlme)
-m1 <- lme(Estatic_rel ~  Stress_kPa + freq + num_squish + Porosity*ChemIndex  + freq * num_squish ,random=~1|SampleCode,data=df)
+m1 <- lme(Estatic_rel ~  Stress_kPa + freq + num_squish + num_squish:Porosity*ChemIndex + amp*ChemIndex + Time ,random=~Time|SampleCode,data=df)
 anova(m1)
 
 
@@ -115,3 +118,6 @@ ggplot(df, aes(y = Estatic_rel, x = num_squish, group))+
   geom_point(aes(x = num_squish, group = interaction(ChemIndex, Porosity)), color = interaction(ChemIndex, Porosity))
 ```
 
+$$
+b_i = \beta _0 + \beta_1 (Stress) + \beta_2 (Frequency)  + \beta_3 (Porosity * ChemIndex) + \beta_4 (amp*ChemIndex) + \beta_5 ( freq * numSquish) + v_i
+$$
