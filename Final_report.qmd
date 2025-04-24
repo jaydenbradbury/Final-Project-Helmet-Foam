@@ -225,7 +225,7 @@ plot(pressure)
 
 *Succinct response to each question laid out in 1.2.  This a much shorter version of section 3, and focuses on conclusions rather than the analyses.*
 
-**Question 1:**  
+**Question 1:**  Which combination of porosity and chemical index is best at keeping static stiffness stable over time, after accounting for all other variables?
 
 **Question 2:**  
 
