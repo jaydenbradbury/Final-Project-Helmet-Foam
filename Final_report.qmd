@@ -146,19 +146,21 @@ df_clean <- df_clean %>%
 ## 1.1 Research Questions
 
 
-*What are the overarching research questions that the client is targeting?*
-
 **Question 1:**  
 
-**Question 2:**  
 
-*(order them by priority; RQ1 is highest priority)*
 
 ## 1.2 Variables
 
 *What is (are) possible explanatory and response variables?  Relevant notes about how each is measured/recorded.*
 
 *A table is recommended here. *
+
+```{r}
+#| echo: false
+#| label: tbl-variables
+#| tbl-cap: "Variables used in Data Analysis"
+```
 
 
 *If design is complex, here is a good place to write a detailed description.*
@@ -174,32 +176,11 @@ df_clean <- df_clean %>%
 
 For example, notice the way @fig-example1 shows a scatterplot.
 
-```{r}
-#| echo: false
-#| label: Model_code
-#| warning: false
 
 
-st_stiff_model <- lmer(Estatic_rel ~ Stress_kPa + log(Time):Porosity*ChemIndex + freq +  num_squish+  (1|SampleCode), data = df)
 
-summary(st_stiff_model)
 
-library(nlme)
-m1 <- lme(Estatic_rel ~   Stress_kPa + log(Time):Porosity*ChemIndex +  freq + num_squish ,random=~1|SampleCode,data=df)
-anova(m1)
-```
 
-These are interesting remarks about data summaries.  The overall mean fuel economy in the data is `r mean(mtcars$mpg, na.rm = TRUE)` miles per gallon, which I can calculate in-line since it's very simple.  Most code requires a code chunk, but raw code and output should never appear in the body of the report.  Here's a nice table of summary statistics formatted for the report in @tbl-summarystats.
-
-```{r}
-#| echo: false
-#| label: tbl-summarystats
-#| tbl-cap: "Summary Statistics for Engine Displacement by Cylinders"
-
-favstats(disp ~ cyl, data = mtcars) %>%
-  knitr::kable()
-
-```
 
 *Describe important outcomes of the EDA that the reader should notice.*
 
@@ -212,9 +193,26 @@ favstats(disp ~ cyl, data = mtcars) %>%
 - *Interpretation of estimates/statistics/p-values IN CONTEXT*
 - *Enough detail that the model/analysis could be reproduced by another statistician*
 
-Look at @fig-example2 to see what figure with subfigures looks like.
-
 ```{r}
+#| echo: false
+#| label: Model_code
+#| warning: false
+
+
+st_stiff_model <- lmer(Estatic_rel ~  log(Time):Porosity*ChemIndex + freq +  num_squish+  (1|SampleCode), data = df)
+
+summary(st_stiff_model)
+
+library(nlme)
+m1 <- lme(Estatic_rel ~ log(Time):Porosity*ChemIndex +  freq + num_squish ,random=~1|SampleCode,data=df)
+anova(m1)
+```
+
+```{r, warning = FALSE}
+#| echo: false
+#| label: em-plot
+#| warning: false
+#| fig-cap: "Emmeans Comparison by Porosity*ChemIndex"
 emmean <- emmeans(First_model,~ Porosity *  ChemIndex)
 plot(emmean)
 ```
@@ -226,9 +224,6 @@ plot(emmean)
 
 **Question 1:**  Which combination of porosity and chemical index is best at keeping static stiffness stable over time, after accounting for all other variables?
 
-**Question 2:**  
-
-*(all research questions in 1.1 and/or statistical question in 1.2 should be addressed, in the same order)*
 
 # 5. Resources 
 

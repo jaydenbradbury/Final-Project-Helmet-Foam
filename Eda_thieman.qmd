@@ -85,12 +85,12 @@ Y_{ij} = (\alpha _0 + \alpha_1 (Stress) + \alpha_2 (Frequency) + \alpha_3 (Numbe
 $$
 ```{r}
 
-First_model <- lmer(Estatic_rel ~ Stress_kPa + log(Time):Porosity*ChemIndex + freq +  num_squish+  (1|SampleCode), data = df)
+First_model <- lmer(Estatic_rel ~  log(Time):Porosity*ChemIndex + freq +  num_squish+  (1|SampleCode), data = df)
 
 summary(First_model)
 
 library(nlme)
-m1 <- lme(Estatic_rel ~   Stress_kPa + log(Time):Porosity*ChemIndex +  freq + num_squish ,random=~1|SampleCode,data=df)
+m1 <- lme(Estatic_rel ~  log(Time):Porosity*ChemIndex +  freq + num_squish ,random=~1|SampleCode,data=df)
 anova(m1)
 
 
