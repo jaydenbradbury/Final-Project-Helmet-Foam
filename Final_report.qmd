@@ -17,7 +17,11 @@ knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse) # for example
 library(mosaic)    # for example
 library(ggformula) # for example
-library(car)       # for example
+library(lme4)
+library(ggplot2)
+library(emmeans)
+library(nlme)
+library(readxl)
 library(tinytex)   # for example
 
 # read in data 
@@ -121,6 +125,8 @@ df_clean <- df_clean %>%
  
  df_clean <- df_clean %>%
    filter(Num_squish <= 10000)
+ df_clean <- df_clean %>%
+   mutate(Time = Num_squish/freq)
  
  df_clean <- df_clean |>
    filter(Estatic_rel < 1)
