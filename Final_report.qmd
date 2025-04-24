@@ -176,16 +176,17 @@ For example, notice the way @fig-example1 shows a scatterplot.
 
 ```{r}
 #| echo: false
-#| label: fig-example1
+#| label: Model_code
 #| warning: false
-#| fig-cap: "Fuel Efficiency as it relates to vehicle weight for a sample of cars."
-#| fig-align: "center"
-#| fig-width: 3
-#| fig-height: 3
 
 
-data("mtcars")
-gf_point(mpg~ wt, data = mtcars)
+st_stiff_model <- lmer(Estatic_rel ~ Stress_kPa + log(Time):Porosity*ChemIndex + freq +  num_squish+  (1|SampleCode), data = df)
+
+summary(st_stiff_model)
+
+library(nlme)
+m1 <- lme(Estatic_rel ~   Stress_kPa + log(Time):Porosity*ChemIndex +  freq + num_squish ,random=~1|SampleCode,data=df)
+anova(m1)
 ```
 
 These are interesting remarks about data summaries.  The overall mean fuel economy in the data is `r mean(mtcars$mpg, na.rm = TRUE)` miles per gallon, which I can calculate in-line since it's very simple.  Most code requires a code chunk, but raw code and output should never appear in the body of the report.  Here's a nice table of summary statistics formatted for the report in @tbl-summarystats.
@@ -214,16 +215,8 @@ favstats(disp ~ cyl, data = mtcars) %>%
 Look at @fig-example2 to see what figure with subfigures looks like.
 
 ```{r}
-#| label: fig-example2
-#| layout-ncol: 2
-#| fig-cap: "A figure with two subfigures!"
-#| fig-subcap:  
-#|   - "Line Plot 1"
-#|   - "Line Plot 2"
-
-
-plot(cars)
-plot(pressure)
+emmean <- emmeans(First_model,~ Porosity *  ChemIndex)
+plot(emmean)
 ```
 
 
