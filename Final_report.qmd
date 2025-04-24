@@ -253,6 +253,22 @@ plot(pressure)
 *Detailed information and a copy of code and or software results.  Additional graphs and supporting figures may also be placed in the appendix.*
 
 
+```{r}
+# model diagnostic plots
+qqnorm(residuals(st_stiff_model),
+       main = "Normal Q-Q Plot: Residuals")
+qqline(residuals(st_stiff_model), col = "red")
+
+qqnorm(ranef(st_stiff_model)$SampleCode[[1]],
+       main = "Normal Q-Q Plot: Random Intercepts")  
+qqline(ranef(st_stiff_model)$SampleCode[[1]], col = "red")
+
+hist(residuals(st_stiff_model))
+
+plot(st_stiff_model)
+```
+
+
 ### R Script
 ```{r ref.label=c('front-matter', 'fig-example1','tbl-summarystats', 'fig-example2')}
 #| echo: true
