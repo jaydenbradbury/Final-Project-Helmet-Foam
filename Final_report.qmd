@@ -135,8 +135,7 @@ df_clean <- df_clean %>%
 
 ## 1. Project Description
 
-Moira Foster was tasked with designing an experiment that measured helmet foam durability over long periods of time. The experiment contained three different chemical compositions of foam with two different porosity levels, to create six types of foam. Each of these foams were compressed at different frequencies, strains, and stresses over a period of time. Dr. Foster has hired **enter group name here.** to deterimine which foam type has the most consistent static stiffness over time with impact. The sample contains 71 different foam samples across the 6 combinations. 
-
+Moira Foster was tasked with designing an experiment that measured helmet foam durability over long periods of time. The experiment contained three different chemical compositions of foam with two different porosity levels, to create six types of foam. Each of these foams were compressed at different frequencies, strains, and stresses over a period of time. Dr. Foster has hired **enter group name here.** to deterimine which foam type has the most consistent static stiffness over time with impact. The sample contains 71 different foam samples across the 6 combinations.
 
 *Should be in paragraph from (not bullets). Written for a 3rd party such as your client’s boss, or an external review board. As part of your description, consider the following:*
 
@@ -155,6 +154,8 @@ Moira Foster was tasked with designing an experiment that measured helmet foam d
 *What is (are) possible explanatory and response variables? Relevant notes about how each is measured/recorded.*
 
 *A table is recommended here.*
+
+Below is a table of the variables we considered in our analysis:
 
 ```{r}
 #| echo: false
@@ -197,6 +198,7 @@ df_clean %>%
   ) +
   theme_minimal()
 ```
+
 ```{r, warning=FALSE, echo = FALSE}
 #THIS IS THE PLOT FOR POROSITY CHANGE IN ESTATIC OVER TIME (CYCLES)
 # Plot with group average lines by porosity
@@ -237,6 +239,7 @@ df_clean %>%
   theme_minimal()
 
 ```
+
 ```{r}
 ggplot(df_clean, aes(x = factor(ChemIndex), fill = factor(ChemIndex))) +
   geom_bar() +
@@ -256,6 +259,7 @@ ggplot(df_clean, aes(x = factor(Porosity), fill = factor(Porosity))) +
   theme_minimal() +
   theme(legend.position = "none")
 ```
+
 ```{r}
 ## corr matrix for estatic mpa, tan delta (damping), and NVP
  df_clean %>%
@@ -263,6 +267,7 @@ ggplot(df_clean, aes(x = factor(Porosity), fill = factor(Porosity))) +
   cor(use = "complete.obs")
 
 ```
+
 ```{r}
 df_clean %>%
   group_by(ChemIndex, tandelta) %>%
@@ -294,7 +299,6 @@ df_clean %>%
   ) +
   theme_minimal()
 ```
-
 
 ```{r}
 df_clean %>%
@@ -337,6 +341,7 @@ ggplot(df_stability, aes(x = factor(ChemIndex), y = sd_Estatic, fill = factor(Po
   ) +
   theme_minimal()
 ```
+
 ```{r}
 ggplot(df_clean, aes(x = Cycle, y = Estatic_rel, color = amp)) +
   geom_line(aes(group = SampleCode), alpha = 0.4) +
@@ -439,21 +444,16 @@ ggplot(df_clean, aes(x = Cycle, y = sqrt(Estatic_rel))) +
 -   *Interpretation of estimates/statistics/p-values IN CONTEXT*
 -   *Enough detail that the model/analysis could be reproduced by another statistician*
 
-The linear mixed effects model is defined as:
-$$
+The linear mixed effects model is defined as: $$
 \begin{align*}
 Estatic\_rel_{ij} &= \underbrace{\beta_0}_{\text{fixed intercept}} + \underbrace{a_j}_{\text{random intercept for SampleCode}} \\
 &\quad + \beta_1 \left(\log(\text{Time}) \cdot \text{Porosity} \right)_{ij} \\
 &\quad + \beta_2 \left(\log(\text{Time}) \cdot \text{Porosity} \cdot \text{ChemIndex} \right)_{ij} \\
 &\quad + \beta_3 \cdot \text{freq}_{ij} + \beta_4 \cdot \text{numSquish}_{ij} + \varepsilon_{ij}
 \end{align*}
-$$
-where:
+$$ where:
 
- $\beta_0$ is the fixed intercept
- $a_j \sim \mathcal{N}(0, \sigma^2_{SampleCode})$ is the random intercept for group $j$ (`SampleCode`)
- $\varepsilon_{ij} \sim \mathcal{N}(0, \sigma^2)$ is the residual error
-
+$\beta_0$ is the fixed intercept $a_j \sim \mathcal{N}(0, \sigma^2_{SampleCode})$ is the random intercept for group $j$ (`SampleCode`) $\varepsilon_{ij} \sim \mathcal{N}(0, \sigma^2)$ is the residual error
 
 ```{r}
 #| echo: false
