@@ -135,6 +135,8 @@ df_clean <- df_clean %>%
 
 ## 1. Project Description
 
+Moira .Enter last name here.
+
 *Should be in paragraph from (not bullets).  Written for a 3rd party such as your client’s boss, or an external review board.  As part of your description, consider the following:*
 
 - *Type of study [Designed experiment, Observational study, Sample survey] and brief description of design*
@@ -173,11 +175,6 @@ df_clean <- df_clean %>%
 - *unusual or concerning observations*
 
 *Relevant summary figures that provide intuition for the research questions and/or inform important modeling decisions (correlation structure, etc).*
-
-For example, notice the way @fig-example1 shows a scatterplot.
-
-
-
 
 
 
