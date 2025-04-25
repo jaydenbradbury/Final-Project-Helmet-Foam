@@ -160,6 +160,16 @@ Moira Foster was tasked with designing an experiment that measured helmet foam d
 #| echo: false
 #| label: tbl-variables
 #| tbl-cap: "Variables used in Data Analysis"
+
+variable.desc <- data.frame(Name = c("Sample Code", "Strain", "Relative Porosity", "Frequency", "Amplitude", "Number of Squishes", "Chemical Index", "Porosity", "Relative Static Stiffness", "Time"))
+variable.desc$Type <- c("Categorical", "Numerical", "Numerical", "Numerical", "Numerical", "Numerical", "Categorical", "Categorical", "Numerical", "Numerical")
+variable.desc$Notes <- c("Unique identifier for sample of foam", "Amount of strain tested on foam sample in kPa", "The measured porosity of the foam sample after the initial squish", "The frequency at which the sample foam was squished", "The amplitude at which the sample foam was squished", "Number of squishes performed on foam at given time", "Chemical index of given foam sample", "Porosity of given foam sample", "Static stiffness of given foam sample relative to the initial value of static stiffness", "Time recorded at each measurement")
+knitr::kable(variable.desc, format = "latex", booktabs = TRUE,
+             col.names = c("Name", "Type", "Notes"),
+             longtable = FALSE) %>%
+  kable_styling( full_width = FALSE) %>%
+  column_spec(3, width = "8cm") %>% 
+  add_header_above(c(" " = 3))
 ```
 
 *If design is complex, here is a good place to write a detailed description.*
