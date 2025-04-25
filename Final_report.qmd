@@ -172,6 +172,255 @@ Moira Foster was tasked with designing an experiment that measured helmet foam d
 
 *Describe important outcomes of the EDA that the reader should notice.*
 
+```{r, warning=FALSE, echo = FALSE}
+df_clean %>%
+  group_by(ChemIndex, Cycle) %>%
+  summarise(mean_Estatic = mean(Estatic_MPA, na.rm = TRUE), .groups = "drop") %>%
+  ggplot(aes(x = Cycle, y = mean_Estatic, color = factor(ChemIndex), group = ChemIndex)) +
+  geom_line(size = 1.2) +
+  geom_point(size = 2) +
+  labs(
+    title = "Estatic_MPA Across Cycles by Foam Type",
+    x = "Cycle",
+    y = "Mean Estatic_MPA",
+    color = "Foam (chemindex)"
+  ) +
+  theme_minimal()
+```
+```{r, warning=FALSE, echo = FALSE}
+#THIS IS THE PLOT FOR POROSITY CHANGE IN ESTATIC OVER TIME (CYCLES)
+# Plot with group average lines by porosity
+df_clean %>%
+  group_by(Porosity, Cycle) %>%
+  summarise(mean_Estatic = mean(Estatic_MPA, na.rm = TRUE), .groups = "drop") %>%
+  ggplot(aes(x = Cycle, y = mean_Estatic, color = factor(Porosity), group = Porosity)) +
+  geom_line(size = 1.2) +
+  geom_point(size = 2) +
+  labs(
+    title = "Estatic_MPA Across Cycles by Porosity",
+    x = "Cycle",
+    y = "Mean Estatic_MPA",
+    color = "Foam (Porosity)"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+#THIS IS THE PLOT FOR CHANGE IN ESTATIC OVER TIME FOR EACH UNIQUE COMBO OF POROSTIY AND CHEM INDEX
+df_clean %>%
+  group_by(ChemIndex, Porosity, Cycle) %>%
+  summarise(mean_Estatic = mean(Estatic_MPA, na.rm = TRUE), .groups = "drop") %>%
+  ggplot(aes(
+    x = Cycle,
+    y = mean_Estatic,
+    group = interaction(ChemIndex, Porosity),
+    color = interaction(ChemIndex, Porosity)
+  )) +
+  geom_line(size = 1.2) +
+  geom_point(size = 2) +
+  labs(
+    title = "Estatic_MPA Across Cycles by Foam Type and Porosity",
+    x = "Cycle",
+    y = "Mean Estatic_MPA",
+    color = "chemindex / Porosity"
+  ) +
+  theme_minimal()
+
+```
+```{r}
+ggplot(df_clean, aes(x = factor(ChemIndex), fill = factor(ChemIndex))) +
+  geom_bar() +
+  labs(title = "Count of Each Foam Type",
+       x = "Foam Type",
+       y = "Count") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+```{r}
+ggplot(df_clean, aes(x = factor(Porosity), fill = factor(Porosity))) +
+  geom_bar() +
+  labs(title = "Count of Each Foam Type",
+       x = "Foam Type",
+       y = "Count") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+```{r}
+## corr matrix for estatic mpa, tan delta (damping), and NVP
+ df_clean %>%
+  select(Estatic_MPA, tandelta, NVP) %>%
+  cor(use = "complete.obs")
+
+```
+```{r}
+df_clean %>%
+  group_by(ChemIndex, tandelta) %>%
+  summarise(mean_Estatic = mean(Estatic_MPA, na.rm = TRUE), .groups = "drop") %>%
+  ggplot(aes(x = tandelta, y = mean_Estatic, color = factor(ChemIndex), group = ChemIndex)) +
+  geom_line(size = 1.2) +
+  geom_point(size = 2) +
+  labs(
+    title = "Estatic_MPA vs. tan delta by Foam Type",
+    x = "tan delta",
+    y = "Mean Estatic_MPA",
+    color = "Foam (chemindex)"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+df_clean %>%
+  group_by(Porosity, tandelta) %>%
+  summarise(mean_Estatic = mean(Estatic_MPA, na.rm = TRUE), .groups = "drop") %>%
+  ggplot(aes(x = tandelta, y = mean_Estatic, color = factor(Porosity), group = Porosity)) +
+  geom_line(size = 1.2) +
+  geom_point(size = 2) +
+  labs(
+    title = "Estatic_MPA vs. tan delta by Foam Type",
+    x = "tan delta",
+    y = "Mean Estatic_MPA",
+    color = "Foam (porosity)"
+  ) +
+  theme_minimal()
+```
+
+
+```{r}
+df_clean %>%
+  group_by(ChemIndex, Porosity, Stress_kPa) %>%
+  summarise(mean_Estatic = mean(Estatic_MPA, na.rm = TRUE), .groups = "drop") %>%
+  ggplot(aes(
+    x = Stress_kPa,
+    y = mean_Estatic,
+    group = interaction(ChemIndex, Porosity),
+    color = interaction(ChemIndex, Porosity)
+  )) +
+  geom_smooth(size = 1.2) +
+  geom_point(size = 2) +
+  labs(
+    title = "Estatic_MPA vs. Stress by Foam Type and Porosity",
+    x = "stress",
+    y = "Mean Estatic_MPA",
+    color = "chemindex / Porosity"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+df_stability <- df_clean %>%
+  group_by(ChemIndex, Porosity) %>%
+  summarise(
+    sd_Estatic = sd(Estatic_MPA, na.rm = TRUE),  # measures variation
+    range_Estatic = max(Estatic_MPA, na.rm = TRUE) - min(Estatic_MPA, na.rm = TRUE),  # another stability metric
+    .groups = "drop"
+  ) %>%
+  arrange(sd_Estatic)
+
+ggplot(df_stability, aes(x = factor(ChemIndex), y = sd_Estatic, fill = factor(Porosity))) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(
+    title = "Standard Deviation of Static Stiffness by Foam Type and Porosity",
+    x = "Chemical Index",
+    y = "SD of Estatic_MPA (lower = more stable)",
+    fill = "Porosity"
+  ) +
+  theme_minimal()
+```
+```{r}
+ggplot(df_clean, aes(x = Cycle, y = Estatic_rel, color = amp)) +
+  geom_line(aes(group = SampleCode), alpha = 0.4) +
+  geom_smooth(method = "loess", se = FALSE, linewidth = 1.2) +
+  facet_grid(Porosity ~ ChemIndex) +
+  labs(
+    title = "Effect of Amplitude on Estatic_rel Over Time",
+    x = "Cycle",
+    y = "Relative Static Stiffness (Estatic_rel)",
+    color = "Amplitude"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+ggplot(df_clean, aes(x = Cycle, y = Estatic_rel, color = freq)) +
+  geom_line(aes(group = SampleCode), alpha = 0.4) +
+  geom_smooth(method = "loess", se = FALSE, linewidth = 1.2) +
+  facet_grid(Porosity ~ ChemIndex) +
+  labs(
+    title = "Effect of Frequency on Estatic_rel Over Time",
+    x = "Cycle",
+    y = "Relative Static Stiffness (Estatic_rel)",
+    color = "Frequency"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+ggplot(df_clean, aes(x = Cycle, y = Estatic_rel, color = Relporo)) +
+  geom_line(aes(group = SampleCode), alpha = 0.4) +
+  geom_smooth(method = "loess", se = FALSE, linewidth = 1.2) +
+  facet_grid(Porosity ~ ChemIndex) +
+  labs(
+    title = "Effect of Relative Porosity on Estatic_rel Over Time",
+    x = "Cycle",
+    y = "Relative Static Stiffness (Estatic_rel)",
+    color = "Relative Porosity"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+ggplot(df_clean, aes(x = Cycle, y = Estatic_rel, color = Stress_kPa)) +
+  geom_line(aes(group = SampleCode), alpha = 0.4) +
+  geom_smooth(method = "loess", se = FALSE, linewidth = 1.2) +
+  facet_grid(Porosity ~ ChemIndex) +
+  labs(
+    title = "Effect of stress on Estatic_rel Over Time",
+    x = "Cycle",
+    y = "Relative Static Stiffness (Estatic_rel)",
+    color = "Stress"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+ggplot(df_clean, aes(x = Cycle, y = Estatic_rel, color = strain)) +
+  geom_line(aes(group = SampleCode), alpha = 0.4) +
+  geom_smooth(method = "loess", se = FALSE, linewidth = 1.2) +
+  facet_grid(Porosity ~ ChemIndex) +
+  labs(
+    title = "Effect of strain on Estatic_rel Over Time",
+    x = "Cycle",
+    y = "Relative Static Stiffness (Estatic_rel)",
+    color = "strain"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+ggplot(df_clean, aes(x = Cycle, y = Estatic_rel)) +
+  geom_line(aes(group = SampleCode), alpha = 0.4) +
+  geom_smooth(method = "loess", se = FALSE, linewidth = 1.2) +
+  labs(
+    title = "Estatic_relative over time",
+    x = "Cycle",
+    y = "Relative Static Stiffness (Estatic_rel)",
+  ) +
+  theme_minimal()
+```
+
+```{r}
+ggplot(df_clean, aes(x = Cycle, y = sqrt(Estatic_rel))) +
+  geom_line(aes(group = SampleCode), alpha = 0.4) +
+  geom_smooth(method = "loess", se = FALSE, linewidth = 1.2) +
+  labs(
+    title = "Estatic_relative over time",
+    x = "Cycle",
+    y = "Relative Static Stiffness (Estatic_rel)",
+  ) +
+  theme_minimal()
+```
+
 # 3. Statistical Analysis
 
 *Describe statistical analysis in terms that your client will be able to understand and perhaps use in presenting their own research. This section should summarize all relevant analyses that lead to your final conclusions/decisions/recommendations, but should NEVER include visible code (folded code chunks are fine) or unformatted software output.*
@@ -202,12 +451,12 @@ where:
 #| warning: false
 
 
-st_stiff_model <- lmer(Estatic_rel ~  log(Time):Porosity*ChemIndex + freq +  num_squish+  (1|SampleCode), data = df)
+st_stiff_model <- lmer( Estatic_rel ~  log(Time):Porosity*ChemIndex + freq +  Num_squish+  (1|SampleCode), data = df_clean)
 
 summary(st_stiff_model)
 
 library(nlme)
-m1 <- lme(Estatic_rel ~ log(Time):Porosity*ChemIndex +  freq + num_squish ,random=~1|SampleCode,data=df)
+m1 <- lme(Estatic_rel ~ log(Time):Porosity*ChemIndex +  freq + Num_squish ,random=~1|SampleCode,data=df_clean)
 anova(m1)
 ```
 
@@ -216,7 +465,7 @@ anova(m1)
 #| label: em-plot
 #| warning: false
 #| fig-cap: "Emmeans Comparison by Porosity*ChemIndex"
-emmean <- emmeans(First_model,~ Porosity *  ChemIndex)
+emmean <- emmeans(st_stiff_model,~ Porosity *  ChemIndex)
 plot(emmean)
 ```
 
