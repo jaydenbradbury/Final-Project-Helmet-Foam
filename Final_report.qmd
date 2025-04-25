@@ -135,7 +135,7 @@ df_clean <- df_clean %>%
 
 ## 1. Project Description
 
-Moira **.Enter last name here.** was tasked with designing an experiment that measured helmet foam durability over long periods of time. The experiment contained three different chemical compositions of foam with two different porosity levels, to create six types of foam.
+Moira Foster was tasked with designing an experiment that measured helmet foam durability over long periods of time. The experiment contained three different chemical compositions of foam with two different porosity levels, to create six types of foam. Each of these foams were compressed at different frequencies, strains, and stresses over a period of time. Dr. Foster has hired **enter group name here.** to deterimine which foam type has the most consistent static stiffness over time with impact. The sample contains 71 different foam samples across the 6 combinations. 
 
 *Should be in paragraph from (not bullets). Written for a 3rd party such as your client’s boss, or an external review board. As part of your description, consider the following:*
 
@@ -147,7 +147,7 @@ Moira **.Enter last name here.** was tasked with designing an experiment that me
 
 ## 1.1 Research Questions
 
-**Question 1:**
+**Question 1:** Which combination of porosity and chemical index is best to predict static stiffness over time after accounting for all other variables?
 
 ## 1.2 Variables
 
