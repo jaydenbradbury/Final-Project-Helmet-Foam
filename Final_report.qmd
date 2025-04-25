@@ -130,33 +130,30 @@ df_clean <- df_clean %>%
  
  df_clean <- df_clean |>
    filter(Estatic_rel < 1)
+ 
 ```
-
 
 ## 1. Project Description
 
-Moira .Enter last name here.
+Moira **.Enter last name here.** was tasked with designing an experiment that measured helmet foam durability over long periods of time. The experiment contained three different chemical compositions of foam with two different porosity levels, to create six types of foam.
 
-*Should be in paragraph from (not bullets).  Written for a 3rd party such as your client’s boss, or an external review board.  As part of your description, consider the following:*
+*Should be in paragraph from (not bullets). Written for a 3rd party such as your client’s boss, or an external review board. As part of your description, consider the following:*
 
-- *Type of study [Designed experiment, Observational study, Sample survey] and brief description of design*
-- *Stage of the experiment [Planning stage or Analysis stage]*
-- *Objective of study and role of this analysis*
-- *Scope of project*
-- *Intended use for results*
+-   *Type of study \[Designed experiment, Observational study, Sample survey\] and brief description of design*
+-   *Stage of the experiment \[Planning stage or Analysis stage\]*
+-   *Objective of study and role of this analysis*
+-   *Scope of project*
+-   *Intended use for results*
 
 ## 1.1 Research Questions
 
-
-**Question 1:**  
-
-
+**Question 1:**
 
 ## 1.2 Variables
 
-*What is (are) possible explanatory and response variables?  Relevant notes about how each is measured/recorded.*
+*What is (are) possible explanatory and response variables? Relevant notes about how each is measured/recorded.*
 
-*A table is recommended here. *
+*A table is recommended here.*
 
 ```{r}
 #| echo: false
@@ -164,31 +161,39 @@ Moira .Enter last name here.
 #| tbl-cap: "Variables used in Data Analysis"
 ```
 
-
 *If design is complex, here is a good place to write a detailed description.*
 
-#  2. Exploratory Data Analysis (EDA)
+# 2. Exploratory Data Analysis (EDA)
 
-*Description of important variables.*
-- *summary statistics*
-- *missing Data*
-- *unusual or concerning observations*
+*Description of important variables.* - *summary statistics* - *missing Data* - *unusual or concerning observations*
 
 *Relevant summary figures that provide intuition for the research questions and/or inform important modeling decisions (correlation structure, etc).*
 
-
-
-
 *Describe important outcomes of the EDA that the reader should notice.*
 
-# 3. Statistical Analysis 
+# 3. Statistical Analysis
 
+*Describe statistical analysis in terms that your client will be able to understand and perhaps use in presenting their own research. This section should summarize all relevant analyses that lead to your final conclusions/decisions/recommendations, but should NEVER include visible code (folded code chunks are fine) or unformatted software output.*
 
-*Describe statistical analysis in terms that your client will be able to understand and perhaps use in presenting their own research.  This section should summarize all relevant analyses that lead to your final conclusions/decisions/recommendations, but should NEVER include visible code (folded code chunks are fine) or unformatted software output.*
+-   *Model Assumptions & how checked/verified (details left to appendix)*
+-   *Interpretation of estimates/statistics/p-values IN CONTEXT*
+-   *Enough detail that the model/analysis could be reproduced by another statistician*
 
-- *Model Assumptions & how checked/verified (details left to appendix)*
-- *Interpretation of estimates/statistics/p-values IN CONTEXT*
-- *Enough detail that the model/analysis could be reproduced by another statistician*
+The linear mixed effects model is defined as:
+$$
+\begin{align*}
+Estatic\_rel_{ij} &= \underbrace{\beta_0}_{\text{fixed intercept}} + \underbrace{a_j}_{\text{random intercept for SampleCode}} \\
+&\quad + \beta_1 \left(\log(\text{Time}) \cdot \text{Porosity} \right)_{ij} \\
+&\quad + \beta_2 \left(\log(\text{Time}) \cdot \text{Porosity} \cdot \text{ChemIndex} \right)_{ij} \\
+&\quad + \beta_3 \cdot \text{freq}_{ij} + \beta_4 \cdot \text{numSquish}_{ij} + \varepsilon_{ij}
+\end{align*}
+$$
+where:
+
+ $\beta_0$ is the fixed intercept
+ $a_j \sim \mathcal{N}(0, \sigma^2_{SampleCode})$ is the random intercept for group $j$ (`SampleCode`)
+ $\varepsilon_{ij} \sim \mathcal{N}(0, \sigma^2)$ is the residual error
+
 
 ```{r}
 #| echo: false
@@ -214,29 +219,25 @@ emmean <- emmeans(First_model,~ Porosity *  ChemIndex)
 plot(emmean)
 ```
 
+# 4. Recommendations
 
-# 4. Recommendations 
+*Succinct response to each question laid out in 1.2. This a much shorter version of section 3, and focuses on conclusions rather than the analyses.*
 
-*Succinct response to each question laid out in 1.2.  This a much shorter version of section 3, and focuses on conclusions rather than the analyses.*
+**Question 1:** Which combination of porosity and chemical index is best at keeping static stiffness stable over time, after accounting for all other variables?
 
-**Question 1:**  Which combination of porosity and chemical index is best at keeping static stiffness stable over time, after accounting for all other variables?
-
-
-# 5. Resources 
+# 5. Resources
 
 *List resources that your client might find useful*
 
 # 6. Additional Considerations
 
-- *Limitations to the recommendations*
-- *Concerns you may have about the study; suggestions for similar studies in future*
-- *Technical comments*
-  
+-   *Limitations to the recommendations*
+-   *Concerns you may have about the study; suggestions for similar studies in future*
+-   *Technical comments*
 
-# Technical Appendix  
+# Technical Appendix
 
-*Detailed information and a copy of code and or software results.  Additional graphs and supporting figures may also be placed in the appendix.*
-
+*Detailed information and a copy of code and or software results. Additional graphs and supporting figures may also be placed in the appendix.*
 
 ```{r}
 # model diagnostic plots
@@ -253,8 +254,8 @@ hist(residuals(st_stiff_model))
 plot(st_stiff_model)
 ```
 
-
 ### R Script
+
 ```{r ref.label=c('front-matter', 'fig-example1','tbl-summarystats', 'fig-example2')}
 #| echo: true
 #| eval: false
