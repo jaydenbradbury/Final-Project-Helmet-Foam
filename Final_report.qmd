@@ -173,7 +173,9 @@ knitr::kable(variable.desc, format = "latex", booktabs = TRUE,
   add_header_above(c(" " = 3))
 ```
 
+<!--
 *If design is complex, here is a good place to write a detailed description.*
+-->
 
 # 2. Exploratory Data Analysis (EDA)
 
