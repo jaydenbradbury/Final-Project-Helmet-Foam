@@ -30,6 +30,7 @@ library(GGally)
 library(kableExtra)
 library(emmeans)
 library(Stat2Data)
+library(corrplot)
 
 
 # read in data 
@@ -223,7 +224,75 @@ ggplot(df_clean, aes(x = log(Time), y = Estatic_rel, group = SampleCode)) +
 
 @fig-Figure1 shows relative static stiffness over log(Time). We are using log(Time) because the relationship between time and static stiffness was not linear. See @fig-estatRel-time in the appendix for more information. From this figure, we can see that there is a negative relationship between log(Time) and relative static stiffness. It also appears that, depending on the foam type, there might be a different relationship. Some slopes are steeper than others, and some of the starting values of relative static stiffness are different than others. 
 
+Next, we decided to look at the chemical index and porosity of the foams versus the relative static stiffness. 
 
+```{r}
+#| echo: false
+#| label: fig-chem-poro
+#| warning: false 
+#| fig-cap: "Chemical Index vs. Relative Static Stiffness for each level of Porosity"
+#| fig-align: "center"
+#| fig-width: 6
+#| fig-height: 3
+
+
+ggplot(df_clean, aes(x = ChemIndex, y = Estatic_rel, fill = ChemIndex)) +
+  geom_boxplot() +
+  geom_jitter(alpha = 0.5) +
+  facet_wrap(~ Porosity) +
+  labs(title = "Estatic_rel by ChemIndex and Porosity",
+       y = "Relative Static Stiffness") +
+  theme_minimal()
+```
+
+In @fig-chem-poro, the relationship between chemical index and relative static stiffness is different for the two levels of foam porosity. This indicates that there is likely a significant interaction between chemical index and porosity. 
+
+Next, we look at a correlation plot between all numerical variables.
+
+```{r}
+#| echo: false
+#| label: fig-correlation
+#| warning: false 
+#| fig-cap: "Correlation Matrix"
+#| fig-align: "center"
+#| fig-width: 6
+#| fig-height: 3
+
+
+df_numeric <- df_clean %>%
+  select(Estatic_rel, strain, Stress_kPa, Relporo, freq, amp, Num_squish, Time)  # Adjust based on your actual numeric variables
+
+# Compute the correlation matrix
+corr_matrix <- cor(df_numeric, use = "complete.obs")
+
+# Plot the correlation matrix
+corrplot(corr_matrix, method = "circle", type = "lower", tl.col = "black")
+```
+
+@fig-correlation gives us a good idea of what variables might need to be included in our final model. As we can see, number of squishes and frequency are highly correlated with relative static stiffness. This is obvious, as relative static stiffness is going to have a relationship with time as we saw in @fig-Figure1. We also see that relative porosity and strain are correlated, as well as stress and strain. 
+
+Lastly, we look at how frequency is related to relative static stiffness over time.
+
+```{r}
+#| echo: false
+#| label: fig-freq-estaticRel
+#| warning: false 
+#| fig-cap: "Frequency vs. Relative Static Stiffness over Time"
+#| fig-align: "center"
+#| fig-width: 6
+#| fig-height: 3
+ggplot(df_clean, aes(x = log(Time), y = Estatic_rel, color = freq)) +
+  geom_line(aes(group = SampleCode), alpha = 0.7, linewidth = 1.5) +
+  facet_grid(Porosity ~ ChemIndex) +
+  labs(
+    title = "Effect of Frequency on Estatic_rel Over Time",
+    x = "log(Time)",
+    y = "Relative Static Stiffness (Estatic_rel)",
+    color = "Frequency"
+  ) +
+  theme_minimal()
+```
+In @fig-freq-estaticRel, we can see that for lower frequencies, there is a higher relative static stiffness level recorded. This trend is the same across the different foam types. Frequency is something that we will consider in our final model. 
 
 # 3. Statistical Analysis
 
@@ -233,16 +302,19 @@ ggplot(df_clean, aes(x = log(Time), y = Estatic_rel, group = SampleCode)) +
 -   *Interpretation of estimates/statistics/p-values IN CONTEXT*
 -   *Enough detail that the model/analysis could be reproduced by another statistician*
 
-The linear mixed effects model is defined as: $$
+The linear mixed effects model is defined as: 
+
+$$
 \begin{align*}
 Estatic\_rel_{ij} &= \underbrace{\beta_0}_{\text{fixed intercept}} + \underbrace{a_j}_{\text{random intercept for SampleCode}} \\
 &\quad + \beta_1 \left(\log(\text{Time}) \cdot \text{Porosity} \right)_{ij} \\
 &\quad + \beta_2 \left(\log(\text{Time}) \cdot \text{Porosity} \cdot \text{ChemIndex} \right)_{ij} \\
 &\quad + \beta_3 \cdot \text{freq}_{ij} + \beta_4 \cdot \text{numSquish}_{ij} + \varepsilon_{ij}
 \end{align*}
-$$ where:
+$$ 
+where:
 
-$\beta_0$ is the fixed intercept $a_j \sim \mathcal{N}(0, \sigma^2_{SampleCode})$ is the random intercept for group $j$ (`SampleCode`) $\varepsilon_{ij} \sim \mathcal{N}(0, \sigma^2)$ is the residual error
+$\beta_0$ is the fixed intercept $a_j \sim \mathcal{N}(0, \sigma^2_{SampleCode})$ is the random intercept for group $j$ (`SampleCode`) $\varepsilon_{ij} \sim \mathcal{N}(0, \sigma^2)$ is the residual error.
 
 ```{r}
 #| echo: false
@@ -346,7 +418,7 @@ plot(st_stiff_model)
 
 ### R Script
 
-```{r ref.label=c('front-matter', 'fig-example1','tbl-summarystats', 'fig-example2')}
+```{r ref.label=c('tbl-variables', 'fig-Figure1', 'fig-chem-poro', 'Model-code', 'em-plot' )}
 #| echo: true
 #| eval: false
 
