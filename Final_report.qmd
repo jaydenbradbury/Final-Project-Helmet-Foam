@@ -166,7 +166,7 @@ Moira Foster was tasked with designing an experiment that measured helmet foam d
 
 *A table is recommended here.*
 
-To ensure that we are extracting the information needed, we created two new variables to be used in our analysis. First, we created a time variable. Taking the number of squished performed on a foam sample and dividing it by the frequency of those squishes gives us a time variable. Next, we created a relative static stiffness variable. This was done by taking every entry of static stiffness for a given foam sample and dividing it by the initial value of static stiffness for that foam sample. This helps with seeing how the static stiffness changes over time.
+To ensure that we are extracting the information needed, we created two new variables to be used in our analysis. First, we created a time variable that was calculated by taking the number of squishes performed on a foam sample in that current cycle and dividing it by the frequency of those squishes. Next, we created a relative static stiffness variable to act as our response variable. This was done by taking every measurement of static stiffness for a given foam sample and dividing it by the initial value of static stiffness for that foam sample. This helps with seeing how the static stiffness changes over time.
 
 Below is a table of the variables we considered in our analysis:
 
@@ -222,7 +222,7 @@ ggplot(df_clean, aes(x = log(Time), y = Estatic_rel, group = SampleCode)) +
 # grey lines are individual measurements
 ```
 
-@fig-Figure1 shows relative static stiffness over log(Time). We are using log(Time) because the relationship between time and static stiffness was not linear. See @fig-estatRel-time in the appendix for more information. From this figure, we can see that there is a negative relationship between log(Time) and relative static stiffness. It also appears that, depending on the foam type, there might be a different relationship. Some slopes are steeper than others, and some of the starting values of relative static stiffness are different than others. 
+@fig-Figure1 shows relative static stiffness over log(Time). We are using log(Time) because the relationship between time and static stiffness was not linear. See @fig-estatRel-time in the appendix for more information. From this figure, we can see that there is a negative relationship between log(Time) and relative static stiffness. It also appears that, depending on the foam type, there might be a different relationship. Some slopes are steeper than others, and some of the starting values of relative static stiffness are different than others which led us to believe that in the model we would need unique intercepts and slopes based on the foam type. 
 
 Next, we decided to look at the chemical index and porosity of the foams versus the relative static stiffness. 
 
@@ -292,7 +292,7 @@ ggplot(df_clean, aes(x = log(Time), y = Estatic_rel, color = freq)) +
   ) +
   theme_minimal()
 ```
-In @fig-freq-estaticRel, we can see that for lower frequencies, there is a higher relative static stiffness level recorded. This trend is the same across the different foam types. Frequency is something that we will consider in our final model. 
+In @fig-freq-estaticRel, we can see that for lower frequencies, there is a higher relative static stiffness level recorded. This trend is the same across the different foam types. Frequency is a possible explanatory variable that we will consider in our final model. 
 
 # 3. Statistical Analysis
 
