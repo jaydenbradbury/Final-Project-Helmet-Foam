@@ -22,7 +22,15 @@ library(ggplot2)
 library(emmeans)
 library(nlme)
 library(readxl)
-library(tinytex)   # for example
+library(tinytex) 
+library(xtable)
+library(knitr)
+library(ggthemes)
+library(GGally)
+library(kableExtra)
+library(emmeans)
+library(Stat2Data)
+
 
 # read in data 
 
@@ -137,6 +145,7 @@ df_clean <- df_clean %>%
 
 Moira Foster was tasked with designing an experiment that measured helmet foam durability over long periods of time. The experiment contained three different chemical compositions of foam with two different porosity levels, to create six types of foam. Each of these foams were compressed at different frequencies, strains, and stresses over a period of time. Dr. Foster has hired **enter group name here.** to deterimine which foam type has the most consistent static stiffness over time with impact. The sample contains 71 different foam samples across the 6 combinations.
 
+<!--
 *Should be in paragraph from (not bullets). Written for a 3rd party such as your client’s boss, or an external review board. As part of your description, consider the following:*
 
 -   *Type of study \[Designed experiment, Observational study, Sample survey\] and brief description of design*
@@ -144,6 +153,7 @@ Moira Foster was tasked with designing an experiment that measured helmet foam d
 -   *Objective of study and role of this analysis*
 -   *Scope of project*
 -   *Intended use for results*
+-->
 
 ## 1.1 Research Questions
 
@@ -154,6 +164,8 @@ Moira Foster was tasked with designing an experiment that measured helmet foam d
 *What is (are) possible explanatory and response variables? Relevant notes about how each is measured/recorded.*
 
 *A table is recommended here.*
+
+To ensure that we are extracting the information needed, we created two new variables to be used in our analysis. First, we created a time variable. Taking the number of squished performed on a foam sample and dividing it by the frequency of those squishes gives us a time variable. Next, we created a relative static stiffness variable. This was done by taking every entry of static stiffness for a given foam sample and dividing it by the initial value of static stiffness for that foam sample. This helps with seeing how the static stiffness changes over time.
 
 Below is a table of the variables we considered in our analysis:
 
@@ -260,14 +272,6 @@ ggplot(df_clean, aes(x = factor(Porosity), fill = factor(Porosity))) +
        y = "Count") +
   theme_minimal() +
   theme(legend.position = "none")
-```
-
-```{r}
-## corr matrix for estatic mpa, tan delta (damping), and NVP
- df_clean %>%
-  select(Estatic_MPA, tandelta, NVP) %>%
-  cor(use = "complete.obs")
-
 ```
 
 ```{r}
