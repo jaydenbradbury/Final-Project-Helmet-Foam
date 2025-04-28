@@ -426,7 +426,7 @@ plot(st_stiff_model)
 
 ### R Script
 
-```{r ref.label=c('front-matter', 'tbl-variables', 'fig-Figure1', 'fig-chem-poro', 'fig-correlation', 'fig-freq-estaticRel', 'Model-pvalue', 'em-plot', 'fig-estatRel-time','fig-estatRel-logTime', 'diagplots' )}
+```{r ref.label=c('front-matter', 'tbl-variables', 'fig-Figure1', 'fig-chem-poro', 'fig-correlation', 'fig-freq-estaticRel', 'Model-pvalue', 'em-plot', 'fig-estatRel-time','fig-estatRel-logTime', 'diag-plots' )}
 #| echo: true
 #| eval: false
 
