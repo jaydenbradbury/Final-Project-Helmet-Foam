@@ -292,6 +292,7 @@ ggplot(df_clean, aes(x = log(Time), y = Estatic_rel, color = freq)) +
   ) +
   theme_minimal()
 ```
+
 In @fig-freq-estaticRel, we can see that for lower frequencies, there is a higher relative static stiffness level recorded. This trend is the same across the different foam types. Frequency is something that we will consider in our final model. 
 
 # 3. Statistical Analysis
@@ -381,6 +382,7 @@ ggplot(df_clean, aes(x = Time, y = Estatic_rel)) +
   ) +
   theme_minimal()
 ```
+
 Here we can see a clear nonlinear relationship between relative static stiffness and time. A logarithmic transformation is needed. See @fig-estatRel-logTime.
 
 ```{r}
