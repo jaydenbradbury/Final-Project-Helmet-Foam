@@ -348,6 +348,20 @@ emmean <- emmeans(st_stiff_model,~ Porosity *  ChemIndex)
 plot(emmean)
 ```
 
+```{r}
+#| warning: False
+#| label: tbl-emmeans
+#| echo: false
+#| tbl-cap: "Estimated Marginal Means for Static Stiffness."
+
+# Extract pairwise comparison results for both models
+pairs <- as.data.frame(emmeans(st_stiff_model, ~ ChemIndex * Porosity))
+
+# Generate the table using knitr::kable
+knitr::kable(pairs, col.names = c("ChemIndex", "Porosity", "emmean", "SE", "DF", "Lower Conf-Lvl", "Upper Conf-Lvl"))
+```
+
+
 # 4. Recommendations
 
 
