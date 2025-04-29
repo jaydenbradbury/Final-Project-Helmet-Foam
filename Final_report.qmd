@@ -146,6 +146,7 @@ df_clean <- df_clean %>%
 
 Moira Foster was tasked with designing an experiment that measured helmet foam durability over long periods of time. The experiment contained three different chemical compositions of foam with two different porosity levels, to create six types of foam. Each of these foams were compressed at different frequencies, strains, and stresses over a period of time. Dr. Foster has hired **enter group name here.** to deterimine which foam type has the most consistent static stiffness over time with impact. The sample contains 71 different foam samples across the 6 combinations.
 
+```{=html}
 <!--
 *Should be in paragraph from (not bullets). Written for a 3rd party such as your client’s boss, or an external review board. As part of your description, consider the following:*
 
@@ -155,6 +156,7 @@ Moira Foster was tasked with designing an experiment that measured helmet foam d
 -   *Scope of project*
 -   *Intended use for results*
 -->
+```
 
 ## 1.1 Research Questions
 
@@ -186,12 +188,15 @@ knitr::kable(variable.desc, format = "latex", booktabs = TRUE,
   add_header_above(c(" " = 3))
 ```
 
+```{=html}
 <!--
 *If design is complex, here is a good place to write a detailed description.*
 -->
+```
 
 # 2. Exploratory Data Analysis (EDA)
 
+```{=html}
 <!--
 
 *Description of important variables.* - *summary statistics* - *missing Data* - *unusual or concerning observations*
@@ -200,6 +205,8 @@ knitr::kable(variable.desc, format = "latex", booktabs = TRUE,
 
 *Describe important outcomes of the EDA that the reader should notice.*
 -->
+```
+
 To explore what needs to be done for modeling, we perform some exploratory data analysis.
 
 ```{r}
@@ -224,7 +231,7 @@ ggplot(df_clean, aes(x = log(Time), y = Estatic_rel, group = SampleCode)) +
 
 @fig-Figure1 shows relative static stiffness over log(Time). We are using log(Time) because the relationship between time and static stiffness was not linear. See @fig-estatRel-time in the appendix for more information. From this figure, we can see that there is a negative relationship between log(Time) and relative static stiffness. It also appears that, depending on the foam type, there might be a different relationship. Some slopes are steeper than others, and some of the starting values of relative static stiffness are different than others which led us to believe that in the model we would need unique intercepts and slopes based on the foam type.
 
-Next, we decided to look at the chemical index and porosity of the foams versus the relative static stiffness. 
+Next, we decided to look at the chemical index and porosity of the foams versus the relative static stiffness.
 
 ```{r}
 #| echo: false
@@ -245,7 +252,7 @@ ggplot(df_clean, aes(x = ChemIndex, y = Estatic_rel, fill = ChemIndex)) +
   theme_minimal()
 ```
 
-In @fig-chem-poro, the relationship between chemical index and relative static stiffness is different for the two levels of foam porosity. This indicates that there is likely a significant interaction between chemical index and porosity. 
+In @fig-chem-poro, the relationship between chemical index and relative static stiffness is different for the two levels of foam porosity. This indicates that there is likely a significant interaction between chemical index and porosity.
 
 Next, we look at a correlation plot between all numerical variables.
 
@@ -269,7 +276,7 @@ corr_matrix <- cor(df_numeric, use = "complete.obs")
 corrplot(corr_matrix, method = "circle", type = "lower", tl.col = "black")
 ```
 
-@fig-correlation gives us a good idea of what variables might need to be included in our final model. As we can see, number of squishes and frequency are highly correlated with relative static stiffness. This is obvious, as relative static stiffness is going to have a relationship with time as we saw in @fig-Figure1. We also see that relative porosity and strain are correlated, as well as stress and strain. 
+@fig-correlation gives us a good idea of what variables might need to be included in our final model. As we can see, number of squishes and frequency are highly correlated with relative static stiffness. This is obvious, as relative static stiffness is going to have a relationship with time as we saw in @fig-Figure1. We also see that relative porosity and strain are correlated, as well as stress and strain.
 
 Lastly, we look at how frequency is related to relative static stiffness over time.
 
@@ -292,19 +299,21 @@ ggplot(df_clean, aes(x = log(Time), y = Estatic_rel, color = freq)) +
   ) +
   theme_minimal()
 ```
-<<<<<<< HEAD
 
-In @fig-freq-estaticRel, we can see that for lower frequencies, there is a higher relative static stiffness level recorded. This trend is the same across the different foam types. Frequency is a possible explanatory variable that we will consider in our final model. 
+\<\<\<\<\<\<\< HEAD
+
+In @fig-freq-estaticRel, we can see that for lower frequencies, there is a higher relative static stiffness level recorded. This trend is the same across the different foam types. Frequency is a possible explanatory variable that we will consider in our final model.
 
 # 3. Statistical Analysis
-
+<!--
 *Describe statistical analysis in terms that your client will be able to understand and perhaps use in presenting their own research. This section should summarize all relevant analyses that lead to your final conclusions/decisions/recommendations, but should NEVER include visible code (folded code chunks are fine) or unformatted software output.*
 
 -   *Model Assumptions & how checked/verified (details left to appendix)*
 -   *Interpretation of estimates/statistics/p-values IN CONTEXT*
 -   *Enough detail that the model/analysis could be reproduced by another statistician*
+-->
 
-The linear mixed effects model is defined as: 
+The linear mixed effects model is defined as:
 
 $$
 \begin{align*}
@@ -313,8 +322,7 @@ Estatic\_rel_{ij} &= \underbrace{\beta_0}_{\text{fixed intercept}} + \underbrace
 &\quad + \beta_2 \left(\log(\text{Time}) \cdot \text{Porosity} \cdot \text{ChemIndex} \right)_{ij} \\
 &\quad + \beta_3 \cdot \text{freq}_{ij} + \beta_4 \cdot \text{numSquish}_{ij} + \varepsilon_{ij}
 \end{align*}
-$$ 
-where:
+$$ where:
 
 $\beta_0$ is the fixed intercept $a_j \sim \mathcal{N}(0, \sigma^2_{SampleCode})$ is the random intercept for group $j$ (`SampleCode`) $\varepsilon_{ij} \sim \mathcal{N}(0, \sigma^2)$ is the residual error.
 
@@ -361,9 +369,13 @@ plot(emmean)
 -   *Technical comments*
 
 # Technical Appendix
+
+```{=html}
 <!--
 *Detailed information and a copy of code and or software results. Additional graphs and supporting figures may also be placed in the appendix.*
 -->
+```
+
 ```{r}
 #| echo: false
 #| label: fig-estatRel-time
