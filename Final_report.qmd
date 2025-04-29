@@ -1,6 +1,6 @@
 ---
 title: "Final_Report"
-date: "Jayden Bradbury, Alex Jacoby, Jayden Thieman, Molly Wolf"
+author: "Jayden Bradbury, Alex Jacoby, Jayden Thieman, Molly Wolf"
 format: pdf
 editor: visual
 ---
@@ -147,12 +147,27 @@ df_clean <- df_clean %>%
 
 Moira Foster was tasked with designing an experiment that measured helmet foam durability over long periods of time. The experiment contained three different chemical compositions of foam with two different porosity levels, to create six types of foam. Each of these foams were compressed at different frequencies, strains, and stresses over a period of time. Dr. Foster has hired **enter group name here.** to deterimine which foam type has the most consistent static stiffness over time with impact. The sample contains 71 different foam samples across the 6 combinations.
 
+```{=html}
+<!--
+*Should be in paragraph from (not bullets). Written for a 3rd party such as your client’s boss, or an external review board. As part of your description, consider the following:*
+
+-   *Type of study \[Designed experiment, Observational study, Sample survey\] and brief description of design*
+-   *Stage of the experiment \[Planning stage or Analysis stage\]*
+-   *Objective of study and role of this analysis*
+-   *Scope of project*
+-   *Intended use for results*
+-->
+```
 
 ## 1.1 Research Questions
 
 **Question 1:** Which combination of porosity and chemical index is best to predict static stiffness over time after accounting for all other variables?
 
 ## 1.2 Variables
+
+*What is (are) possible explanatory and response variables? Relevant notes about how each is measured/recorded.*
+
+*A table is recommended here.*
 
 To ensure that we are extracting the information needed, we created two new variables to be used in our analysis. First, we created a time variable that was calculated by taking the number of squishes performed on a foam sample in that current cycle and dividing it by the frequency of those squishes. Next, we created a relative static stiffness variable to act as our response variable. This was done by taking every measurement of static stiffness for a given foam sample and dividing it by the initial value of static stiffness for that foam sample. This helps with seeing how the static stiffness changes over time.
 
@@ -174,9 +189,24 @@ knitr::kable(variable.desc, format = "latex", booktabs = TRUE,
   add_header_above(c(" " = 3))
 ```
 
+```{=html}
+<!--
+*If design is complex, here is a good place to write a detailed description.*
+-->
+```
 
 # 2. Exploratory Data Analysis (EDA)
 
+```{=html}
+<!--
+
+*Description of important variables.* - *summary statistics* - *missing Data* - *unusual or concerning observations*
+
+*Relevant summary figures that provide intuition for the research questions and/or inform important modeling decisions (correlation structure, etc).*
+
+*Describe important outcomes of the EDA that the reader should notice.*
+-->
+```
 
 To explore what needs to be done for modeling, we perform some exploratory data analysis.
 
@@ -349,13 +379,8 @@ After performing our analysis we believe that the foam type that has a porosity 
 # 6. Additional Considerations
 
 ## Study Design
-  
-  This study was designed with different techniques then a ststistician would prefer. With frequency and amplitude, as well as strain and stress, not having a sucinct reasoning behind the values chosen. If a similar study is conducted in the future, chosing specific values for each of the explanatory variables may improve the prediction.
 
-
-## Possible Outliers
-
-  There existed possible outliers within the data that were included within the model. These extreme values are seen to be caused by   
+## 
 
 -   *Limitations to the recommendations*
 -   *Concerns you may have about the study; suggestions for similar studies in future*
@@ -414,6 +439,11 @@ ggplot(df_clean, aes(x = log(Time), y = Estatic_rel)) +
 ```{r}
 #| label: diag-plots
 #| warning: false 
+#| fig-pos: "H"
+#| fig-cap: "Diagnostic Plots"
+#| fig-align: "center"
+#| fig-width: 6
+#| fig-height: 3
 
 # model diagnostic plots
 qqnorm(residuals(st_stiff_model),
@@ -435,10 +465,10 @@ plot(st_stiff_model)
 
 
 ```{r}
-#| warning: False
-#| echo: False
-#| label: Anova-tab
-#| tbl-Cap: "Anova Table of Model for P-values"
+#| warning: false
+#| label: anova-stuff
+#| echo: false
+
 library(nlme)
 m1 <- lme(Estatic_rel ~ log(Time):Porosity*ChemIndex +  freq + Num_squish ,random=~1|SampleCode,data=df_clean)
 anova(m1)
@@ -446,7 +476,7 @@ anova(m1)
 
 ### R Script
 
-```{r ref.label=c('front-matter', 'tbl-variables', 'fig-Figure1', 'fig-chem-poro', 'fig-correlation', 'fig-freq-estaticRel', 'Model-pvalue', 'em-plot', 'fig-estatRel-time','fig-estatRel-logTime', 'diag-plots' )}
+```{r ref.label=c('front-matter', 'tbl-variables', 'fig-Figure1', 'fig-chem-poro', 'fig-correlation', 'fig-freq-estaticRel', 'Model-pvalue', 'em-plot', 'fig-estatRel-time','fig-estatRel-logTime', 'diag-plots', 'anova-stuff' )}
 #| echo: true
 #| eval: false
 
