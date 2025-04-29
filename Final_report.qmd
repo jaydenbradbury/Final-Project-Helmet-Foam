@@ -1,5 +1,6 @@
 ---
-title: "Final_Report"
+title: "Final Report"
+author: "Jayden Bradbury, Alex Jacoby, Jayden Thieman, Molly Wolf"
 format: pdf
 editor: visual
 ---
