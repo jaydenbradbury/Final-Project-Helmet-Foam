@@ -296,7 +296,7 @@ $\beta_0$ is the fixed intercept $a_j \sim \mathcal{N}(0, \sigma^2_{SampleCode})
 
 
 
-st_stiff_model <- lmer( Estatic_rel ~  log(Time):Porosity*ChemIndex + freq +  Num_squish+  (1|SampleCode), data = df_clean)
+st_stiff_model <- lmer( Estatic_rel ~  log(Time):Porosity*ChemIndex + freq +  Num_squish+  (log(Time)|SampleCode), data = df_clean)
 
 summary(st_stiff_model)
 
