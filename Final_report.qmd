@@ -180,6 +180,7 @@ Below is a table of the variables we considered in our analysis:
 #| echo: false
 #| label: tbl-variables
 #| tbl-cap: "Variables used in Data Analysis"
+#| tbl-pos: "H"
 
 variable.desc <- data.frame(Name = c("Sample Code", "Strain", "Relative Porosity", "Frequency", "Amplitude", "Number of Squishes", "Chemical Index", "Porosity", "Relative Static Stiffness", "Time"))
 variable.desc$Type <- c("Categorical", "Numerical", "Numerical", "Numerical", "Numerical", "Numerical", "Categorical", "Categorical", "Numerical", "Numerical")
@@ -221,6 +222,7 @@ To explore what needs to be done for modeling, we perform some exploratory data 
 #| fig-align: "center"
 #| fig-width: 6
 #| fig-height: 3
+#| fig-pos: "H"
 
 ggplot(df_clean, aes(x = log(Time), y = Estatic_rel, group = SampleCode)) +
   geom_smooth(alpha = 0.3) +
@@ -245,6 +247,7 @@ Next, we decided to look at the chemical index and porosity of the foams versus 
 #| fig-align: "center"
 #| fig-width: 6
 #| fig-height: 3
+#| fig-pos: "H"
 
 
 ggplot(df_clean, aes(x = ChemIndex, y = Estatic_rel, fill = ChemIndex)) +
@@ -268,6 +271,7 @@ Next, we look at a correlation plot between all numerical variables.
 #| fig-align: "center"
 #| fig-width: 6
 #| fig-height: 3
+#| fig-pos: "H"
 
 
 df_numeric <- df_clean %>%
@@ -292,6 +296,9 @@ Lastly, we look at how frequency is related to relative static stiffness over ti
 #| fig-align: "center"
 #| fig-width: 6
 #| fig-height: 3
+#| fig-pos: "H"
+
+
 ggplot(df_clean, aes(x = log(Time), y = Estatic_rel, color = freq)) +
   geom_line(aes(group = SampleCode), alpha = 0.7, linewidth = 1.5) +
   facet_grid(Porosity ~ ChemIndex) +
@@ -337,6 +344,7 @@ $\beta_0$ is the fixed intercept $a_j \sim \mathcal{N}(0, \sigma^2_{SampleCode})
 #| label: Model_pvalue
 #| warning: false 
 #| tab-cap: "Model Significance"
+#| tbl-pos: "H"
 
 
 
@@ -354,6 +362,7 @@ anova(m1)
 #| label: em-plot
 #| warning: false
 #| fig-cap: "Emmeans Comparison by Porosity*ChemIndex"
+#| fig-pos: "H"
 emmean <- emmeans(st_stiff_model,~ Porosity *  ChemIndex)
 plot(emmean)
 ```
