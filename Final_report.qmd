@@ -1,5 +1,6 @@
 ---
 title: "Final_Report"
+date: "Jayden Bradbury, Alex Jacoby, Jayden Thieman, Molly Wolf"
 format: pdf
 editor: visual
 ---
@@ -232,8 +233,8 @@ Next, we look at a correlation plot between all numerical variables.
 #| warning: false 
 #| fig-cap: "Correlation Matrix"
 #| fig-align: "center"
-#| fig-width: 6
-#| fig-height: 3
+#| fig-width: 8
+#| fig-height: 4
 
 
 df_numeric <- df_clean %>%
@@ -275,7 +276,6 @@ In @fig-freq-estaticRel, we can see that for lower frequencies, there is a highe
 # 3. Statistical Analysis
 
 The linear mixed effects model is defined as:
-
 
 \begin{align*}
 Estatic\_rel_{ij} &= \underbrace{\beta_0}_{\text{fixed intercept}} + \underbrace{a_j}_{\text{random intercept for SampleCode}} \\
@@ -423,6 +423,10 @@ qqline(residuals(st_stiff_model), col = "red")
 qqnorm(ranef(st_stiff_model)$SampleCode[[1]],
        main = "Normal Q-Q Plot: Random Intercepts")  
 qqline(ranef(st_stiff_model)$SampleCode[[1]], col = "red")
+
+qqnorm(ranef(st_stiff_model)$SampleCode[[2]],
+       main = "Normal Q-Q Plot: Random Slopes")  
+qqline(ranef(st_stiff_model)$SampleCode[[2]], col = "red")
 
 hist(residuals(st_stiff_model))
 
