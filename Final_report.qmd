@@ -332,6 +332,7 @@ summary(st_stiff_model)
 
 
 ```
+
 In our model we allowed for a random intercept so that each sample could have their own unique baseline and we allowed for the change that each sample would experience over time to vary uniquely. Looking at our fixed effects we can see that
 chemical index is not significant. Frequency is significant and has a negative relationship with relative static stiffness. We also saw that the more squishes a foam indured the lower the stiffnes became. Looking at the relationship between
 log(Time) and porosity for both levels of porosity the stiffness will decrease over time. Now the terms we were most interested in was the three way interaction terms between log(Time), Porosity, and Chemical Index. In R it assigned the baseline
@@ -346,7 +347,8 @@ decreases more over time in comparison to the baseline foam type. With the data 
 emmean <- emmeans(st_stiff_model,~ Porosity *  ChemIndex)
 plot(emmean)
 ```
-The above plot shows a 95% confidence interval the Relative Static Stiffness based on the unique combination of porosity and chemical index, after accounting for all other variables. This allows us to see if there are significant differences between the different foam types. The foam type with Hight Porosity and Low Chemical Index (79) has the highest stiffness while also having a small confidence interval. That means that it will maintain a high static stiffness and also not fluctuate too much. 
+
+@em-plot shows a 95% confidence interval the Relative Static Stiffness based on the unique combination of porosity and chemical index, after accounting for all other variables. This allows us to see if there are significant differences between the different foam types. The foam type with Hight Porosity and Low Chemical Index (79) has the highest stiffness while also having a small confidence interval. That means that it will maintain a high static stiffness and also not fluctuate too much. 
 
 ```{r}
 #| warning: False
