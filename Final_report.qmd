@@ -163,10 +163,11 @@ Moira Foster was tasked with designing an experiment that measured helmet foam d
 **Question 1:** Which combination of porosity and chemical index is best to predict static stiffness over time after accounting for all other variables?
 
 ## 1.2 Variables
-
+<!--
 *What is (are) possible explanatory and response variables? Relevant notes about how each is measured/recorded.*
 
 *A table is recommended here.*
+-->
 
 To ensure that we are extracting the information needed, we created two new variables to be used in our analysis. First, we created a time variable that was calculated by taking the number of squishes performed on a foam sample in that current cycle and dividing it by the frequency of those squishes. Next, we created a relative static stiffness variable to act as our response variable. This was done by taking every measurement of static stiffness for a given foam sample and dividing it by the initial value of static stiffness for that foam sample. This helps with seeing how the static stiffness changes over time.
 
@@ -305,6 +306,8 @@ ggplot(df_clean, aes(x = log(Time), y = Estatic_rel, color = freq)) +
 In @fig-freq-estaticRel, we can see that for lower frequencies, there is a higher relative static stiffness level recorded. This trend is the same across the different foam types. Frequency is a possible explanatory variable that we will consider in our final model.
 
 # 3. Statistical Analysis
+
+```{=html}
 <!--
 *Describe statistical analysis in terms that your client will be able to understand and perhaps use in presenting their own research. This section should summarize all relevant analyses that lead to your final conclusions/decisions/recommendations, but should NEVER include visible code (folded code chunks are fine) or unformatted software output.*
 
@@ -312,6 +315,7 @@ In @fig-freq-estaticRel, we can see that for lower frequencies, there is a highe
 -   *Interpretation of estimates/statistics/p-values IN CONTEXT*
 -   *Enough detail that the model/analysis could be reproduced by another statistician*
 -->
+```
 
 The linear mixed effects model is defined as:
 
@@ -353,20 +357,23 @@ plot(emmean)
 ```
 
 # 4. Recommendations
-
+<!--
 *Succinct response to each question laid out in 1.2. This a much shorter version of section 3, and focuses on conclusions rather than the analyses.*
+-->
 
 **Question 1:** Which combination of porosity and chemical index is best at keeping static stiffness stable over time, after accounting for all other variables?
 
 # 5. Resources
-
+<!--
 *List resources that your client might find useful*
+-->
 
 # 6. Additional Considerations
-
+<!--
 -   *Limitations to the recommendations*
 -   *Concerns you may have about the study; suggestions for similar studies in future*
 -   *Technical comments*
+-->
 
 # Technical Appendix
 
