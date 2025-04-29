@@ -163,11 +163,14 @@ Moira Foster was tasked with designing an experiment that measured helmet foam d
 **Question 1:** Which combination of porosity and chemical index is best to predict static stiffness over time after accounting for all other variables?
 
 ## 1.2 Variables
+
+```{=html}
 <!--
 *What is (are) possible explanatory and response variables? Relevant notes about how each is measured/recorded.*
 
 *A table is recommended here.*
 -->
+```
 
 To ensure that we are extracting the information needed, we created two new variables to be used in our analysis. First, we created a time variable that was calculated by taking the number of squishes performed on a foam sample in that current cycle and dividing it by the frequency of those squishes. Next, we created a relative static stiffness variable to act as our response variable. This was done by taking every measurement of static stiffness for a given foam sample and dividing it by the initial value of static stiffness for that foam sample. This helps with seeing how the static stiffness changes over time.
 
@@ -301,8 +304,6 @@ ggplot(df_clean, aes(x = log(Time), y = Estatic_rel, color = freq)) +
   theme_minimal()
 ```
 
-\<\<\<\<\<\<\< HEAD
-
 In @fig-freq-estaticRel, we can see that for lower frequencies, there is a higher relative static stiffness level recorded. This trend is the same across the different foam types. Frequency is a possible explanatory variable that we will consider in our final model.
 
 # 3. Statistical Analysis
@@ -357,23 +358,32 @@ plot(emmean)
 ```
 
 # 4. Recommendations
+
+```{=html}
 <!--
 *Succinct response to each question laid out in 1.2. This a much shorter version of section 3, and focuses on conclusions rather than the analyses.*
 -->
+```
 
 **Question 1:** Which combination of porosity and chemical index is best at keeping static stiffness stable over time, after accounting for all other variables?
 
 # 5. Resources
+
+```{=html}
 <!--
 *List resources that your client might find useful*
 -->
+```
 
 # 6. Additional Considerations
+
+```{=html}
 <!--
 -   *Limitations to the recommendations*
 -   *Concerns you may have about the study; suggestions for similar studies in future*
 -   *Technical comments*
 -->
+```
 
 # Technical Appendix
 
