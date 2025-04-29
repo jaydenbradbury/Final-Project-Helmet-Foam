@@ -305,13 +305,6 @@ ggplot(df_clean, aes(x = log(Time), y = Estatic_rel, color = freq)) +
 In @fig-freq-estaticRel, we can see that for lower frequencies, there is a higher relative static stiffness level recorded. This trend is the same across the different foam types. Frequency is a possible explanatory variable that we will consider in our final model.
 
 # 3. Statistical Analysis
-<!--
-*Describe statistical analysis in terms that your client will be able to understand and perhaps use in presenting their own research. This section should summarize all relevant analyses that lead to your final conclusions/decisions/recommendations, but should NEVER include visible code (folded code chunks are fine) or unformatted software output.*
-
--   *Model Assumptions & how checked/verified (details left to appendix)*
--   *Interpretation of estimates/statistics/p-values IN CONTEXT*
--   *Enough detail that the model/analysis could be reproduced by another statistician*
--->
 
 The linear mixed effects model is defined as:
 
@@ -342,8 +335,11 @@ library(nlme)
 m1 <- lme(Estatic_rel ~ log(Time):Porosity*ChemIndex +  freq + Num_squish ,random=~1|SampleCode,data=df_clean)
 anova(m1)
 ```
+In the table above, we can see that all terms included in the model are significant with p-values $< .0001$.
 
-```{r, warning = FALSE}
+The figure below shows the the emmean of our model, sorted by foam type. 
+
+```{r}
 #| echo: false
 #| label: em-plot
 #| warning: false
@@ -354,9 +350,10 @@ plot(emmean)
 
 # 4. Recommendations
 
-*Succinct response to each question laid out in 1.2. This a much shorter version of section 3, and focuses on conclusions rather than the analyses.*
 
 **Question 1:** Which combination of porosity and chemical index is best at keeping static stiffness stable over time, after accounting for all other variables?
+
+For the most consistent static stiffness, a foam with high porosity and a low chemical index will be best. 
 
 # 5. Resources
 
