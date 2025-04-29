@@ -298,10 +298,21 @@ $\beta_0$ is the fixed intercept $a_j \sim \mathcal{N}(0, \sigma^2_{SampleCode})
 
 st_stiff_model <- lmer( Estatic_rel ~  log(Time):Porosity*ChemIndex + freq +  Num_squish+  (1|SampleCode), data = df_clean)
 
-summary(st_stiff_model)
-
+sum <- summary(st_stiff_model)
+ 
 
 ```
+```{r}
+#| warning: False
+#| label: tbl-sum
+#| echo: false
+#| tbl-cap: "Summary Table of Estimates for Model"
+
+sumtable <- as.data.frame(sum$coefficients)
+
+knitr::kable(sumtable)
+```
+
 
 In our model we allowed for a random intercept so that each sample could have their own unique baseline and we allowed for the change that each sample would experience over time to vary uniquely. Looking at our fixed effects we can see that
 chemical index is not significant. Frequency is significant and has a negative relationship with relative static stiffness. We also saw that the more squishes a foam indured the lower the stiffnes became. Looking at the relationship between
@@ -355,7 +366,7 @@ After performing our analysis we believe that the foam type that has a porosity 
 
 ## Possible Outliers
 
-  There existed possible outliers within the data that were included within the model. These extreme values are seen to be caused by   
+  There existed possible outliers within the data that were included within the model. These extreme values are seen to be caused by machine errors in measurement recording. The extreme values had no significant impact on the model to predict static stiffness over time, but should be considered for other response variables. 
 
 -   *Limitations to the recommendations*
 -   *Concerns you may have about the study; suggestions for similar studies in future*
