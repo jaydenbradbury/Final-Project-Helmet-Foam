@@ -1,0 +1,6 @@
+UNDER EMMEANS TABLE:
+...
+
+
+UNDER EMMEANS PLOT:
+The above plot shows a 95% confidence interval the Relative Static Stiffness based on the unique combination of porosity and chemical index, after accounting for all other variables. This allows us to see if there are significant differences between the different foam types. The foam type with Hight Porosity and Low Chemical Index (79) has the highest stiffness while also having a small confidence interval. That means that it will maintain a high static stiffness and also not fluctuate too much. 

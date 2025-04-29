@@ -348,14 +348,16 @@ $\beta_0$ is the fixed intercept $a_j \sim \mathcal{N}(0, \sigma^2_{SampleCode})
 
 
 
-st_stiff_model <- lmer( Estatic_rel ~  log(Time):Porosity*ChemIndex + freq +  Num_squish+  (1|SampleCode), data = df_clean)
+st_stiff_model <- lmer( Estatic_rel ~  log(Time):Porosity*ChemIndex + freq +  Num_squish+  (log(Time)|SampleCode), data = df_clean)
 
-#summary(st_stiff_model)
+summary(st_stiff_model)
 
 library(nlme)
-m1 <- lme(Estatic_rel ~ log(Time):Porosity*ChemIndex +  freq + Num_squish ,random=~1|SampleCode,data=df_clean)
+m1 <- lme(Estatic_rel ~ log(Time):Porosity*ChemIndex +  freq + Num_squish ,random=~log(Time)|SampleCode,data=df_clean)
 anova(m1)
 ```
+
+In @Model_pvalue, we can see that all terms included in the model are significant with p-values $< .0001$.
 
 ```{r, warning = FALSE}
 #| echo: false
@@ -367,6 +369,8 @@ emmean <- emmeans(st_stiff_model,~ Porosity *  ChemIndex)
 plot(emmean)
 ```
 
+@em-plot shows a 95% confidence interval the Relative Static Stiffness based on the unique combination of porosity and chemical index, after accounting for all other variables. This allows us to see if there are significant differences between the different foam types. The foam type with Hight Porosity and Low Chemical Index (79) has the highest stiffness while also having a small confidence interval. That means that it will maintain a high static stiffness and also not fluctuate too much. 
+
 # 4. Recommendations
 
 ```{=html}
@@ -376,6 +380,8 @@ plot(emmean)
 ```
 
 **Question 1:** Which combination of porosity and chemical index is best at keeping static stiffness stable over time, after accounting for all other variables?
+
+For the most consistent static stiffness, a foam with high porosity and a low chemical index will be best. 
 
 # 5. Resources
 
