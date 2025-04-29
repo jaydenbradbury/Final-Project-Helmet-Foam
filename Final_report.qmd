@@ -401,8 +401,15 @@ After performing our analysis we believe that the foam type that has a porosity 
 >>>>>>> bc1cb2bda06f92582b232649520fc379d262e2ca
 
 -   *Limitations to the recommendations*
+
+  Since some of the samples are smaller the results may be less gernalizable. Controlled lab conditions may lead to different long-term performance than real world applications.
+  
 -   *Concerns you may have about the study; suggestions for similar studies in future*
+
+  Make time consistent for each cycle and sample. Equal or greater sample sizes. Expand the types of chemical indexes and porosities involved in the experiment.
+  
 -   *Technical comments*
+  May be better to use time-based response modeling instead of comparing cycles focus on set time periods. Multiple imputation or mixed-effects models would strengthen results from later-cycle data where values are missing non-randomly.
 
 # Technical Appendix
 
