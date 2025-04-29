@@ -300,8 +300,6 @@ ggplot(df_clean, aes(x = log(Time), y = Estatic_rel, color = freq)) +
   theme_minimal()
 ```
 
-\<\<\<\<\<\<\< HEAD
-
 In @fig-freq-estaticRel, we can see that for lower frequencies, there is a higher relative static stiffness level recorded. This trend is the same across the different foam types. Frequency is a possible explanatory variable that we will consider in our final model.
 
 # 3. Statistical Analysis
@@ -329,15 +327,15 @@ $\beta_0$ is the fixed intercept $a_j \sim \mathcal{N}(0, \sigma^2_{SampleCode})
 
 st_stiff_model <- lmer( Estatic_rel ~  log(Time):Porosity*ChemIndex + freq +  Num_squish+  (1|SampleCode), data = df_clean)
 
-#summary(st_stiff_model)
+summary(st_stiff_model)
 
-library(nlme)
-m1 <- lme(Estatic_rel ~ log(Time):Porosity*ChemIndex +  freq + Num_squish ,random=~1|SampleCode,data=df_clean)
-anova(m1)
+
 ```
-In the table above, we can see that all terms included in the model are significant with p-values $< .0001$.
-
-The figure below shows the the emmean of our model, sorted by foam type. 
+In our model we allowed for a random intercept so that each sample could have their own unique baseline and we allowed for the change that each sample would experience over time to vary uniquely. Looking at our fixed effects we can see that
+chemical index is not significant. Frequency is significant and has a negative relationship with relative static stiffness. We also saw that the more squishes a foam indured the lower the stiffnes became. Looking at the relationship between
+log(Time) and porosity for both levels of porosity the stiffness will decrease over time. Now the terms we were most interested in was the three way interaction terms between log(Time), Porosity, and Chemical Index. In R it assigned the baseline
+to be the interaction between log(Time), high porosity and low chemical index. Thus the estimates seen for the interaction terms are in relation to this baseline. We can see that all of these estimates are negative thus there static stiffness 
+decreases more over time in comparison to the baseline foam type.
 
 ```{r}
 #| echo: false
@@ -347,6 +345,7 @@ The figure below shows the the emmean of our model, sorted by foam type.
 emmean <- emmeans(st_stiff_model,~ Porosity *  ChemIndex)
 plot(emmean)
 ```
+The above plot shows a 95% confidence interval the Relative Static Stiffness based on the unique combination of porosity and chemical index, after accounting for all other variables. This allows us to see if there are significant differences between the different foam types. The foam type with Hight Porosity and Low Chemical Index (79) has the highest stiffness while also having a small confidence interval. That means that it will maintain a high static stiffness and also not fluctuate too much. 
 
 ```{r}
 #| warning: False
@@ -367,13 +366,18 @@ knitr::kable(pairs, col.names = c("ChemIndex", "Porosity", "emmean", "SE", "DF",
 
 **Question 1:** Which combination of porosity and chemical index is best at keeping static stiffness stable over time, after accounting for all other variables?
 
-For the most consistent static stiffness, a foam with high porosity and a low chemical index will be best. 
+After performing our analysis we believe that the foam type that has a porosity of 81% and a chemical index of 79 will maintain the static stiffness the best over time.
+ 
 
 # 5. Resources
 
 *List resources that your client might find useful*
 
 # 6. Additional Considerations
+
+## Study Design
+
+## 
 
 -   *Limitations to the recommendations*
 -   *Concerns you may have about the study; suggestions for similar studies in future*
@@ -445,6 +449,14 @@ qqline(ranef(st_stiff_model)$SampleCode[[1]], col = "red")
 hist(residuals(st_stiff_model))
 
 plot(st_stiff_model)
+```
+
+
+```{r}
+#|
+library(nlme)
+m1 <- lme(Estatic_rel ~ log(Time):Porosity*ChemIndex +  freq + Num_squish ,random=~1|SampleCode,data=df_clean)
+anova(m1)
 ```
 
 ### R Script
