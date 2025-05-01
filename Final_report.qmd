@@ -169,7 +169,7 @@ Moira Foster was tasked with designing an experiment that measured helmet foam d
 
 *A table is recommended here.*
 
-To ensure that we are extracting the information needed, we created two new variables to be used in our analysis. First, we created a time variable that was calculated by taking the number of squishes performed on a foam sample in that current cycle and dividing it by the frequency of those squishes. Next, we created a relative static stiffness variable to act as our response variable. This was done by taking every measurement of static stiffness for a given foam sample and dividing it by the initial value of static stiffness for that foam sample. This helps with seeing how the static stiffness changes over time.
+We created two new variables, a time variable that was calculated by taking the number of squishes performed on a foam sample in that current cycle and dividing it by the frequency of those squishes and a relative static stiffness variable. This was done by taking every measurement of static stiffness for a given foam sample and dividing it by the initial value of static stiffness for that foam sample. This helps with seeing how the static stiffness changes over time.
 
 Below is a table of the variables we considered in our analysis:
 
@@ -180,7 +180,7 @@ Below is a table of the variables we considered in our analysis:
 
 variable.desc <- data.frame(Name = c("Sample Code", "Strain", "Relative Porosity", "Frequency", "Amplitude", "Number of Squishes", "Chemical Index", "Porosity", "Relative Static Stiffness", "Time"))
 variable.desc$Type <- c("Categorical", "Numerical", "Numerical", "Numerical", "Numerical", "Numerical", "Categorical", "Categorical", "Numerical", "Numerical")
-variable.desc$Notes <- c("Unique identifier for sample of foam", "Amount of strain tested on foam sample in kPa", "The measured porosity of the foam sample after the initial squish", "The frequency at which the sample foam was squished", "The amplitude at which the sample foam was squished", "Number of squishes performed on foam at given time", "Chemical index of given foam sample (Low, Medium, High)", "Porosity of given foam sample (Low, High)", "Static stiffness of given foam sample relative to the initial value of static stiffness", "Time recorded at each measurement")
+variable.desc$Notes <- c("Unique identifier for sample of foam", "Amount of strain tested on foam sample in kPa", "The measured porosity of the foam sample after the initial squish", "The frequency at which the sample foam was squished", "The amplitude at which the sample foam was squished", "Number of squishes performed on foam at given time", "Chemical index of given foam sample (Low, Medium, High)", "Porosity of given foam sample (Low, High)", "Static stiffness of given foam sample relative to the initial value of static stiffness", "Time recorded at each measurement, Number of Squishes/Frequency")
 knitr::kable(variable.desc, format = "latex", booktabs = TRUE,
              col.names = c("Name", "Type", "Notes"),
              longtable = FALSE) %>%
@@ -232,8 +232,6 @@ ggplot(df_clean, aes(x = log(Time), y = Estatic_rel, group = SampleCode)) +
 
 @fig-Figure1 shows relative static stiffness over log(Time). We are using log(Time) because the relationship between time and static stiffness was not linear. See @fig-estatRel-time in the appendix for more information. From this figure, we can see that there is a negative relationship between log(Time) and relative static stiffness. It also appears that, depending on the foam type, there might be a different relationship. Some slopes are steeper than others, and some of the starting values of relative static stiffness are different than others which led us to believe that in the model we would need unique intercepts and slopes based on the foam type.
 
-Next, we decided to look at the chemical index and porosity of the foams versus the relative static stiffness.
-
 ```{r}
 #| echo: false
 #| label: fig-chem-poro
@@ -253,7 +251,8 @@ ggplot(df_clean, aes(x = ChemIndex, y = Estatic_rel, fill = ChemIndex)) +
   theme_minimal()
 ```
 
-In @fig-chem-poro, the relationship between chemical index and relative static stiffness is different for the two levels of foam porosity. This indicates that there is likely a significant interaction between chemical index and porosity.
+In @fig-chem-poro, the relationship between chemical index and relative static stiffness is different for the two levels of foam porosity. This indicates that there is likely a significant interaction between chemical index and porosity. 
+<!-- Is this lvl 2 or 1 -->
 
 Next, we look at a correlation plot between all numerical variables.
 
@@ -279,7 +278,7 @@ corrplot(corr_matrix, method = "circle", type = "lower", tl.col = "black")
 
 @fig-correlation gives us a good idea of what variables might need to be included in our final model. As we can see, number of squishes and frequency are highly correlated with relative static stiffness. This is obvious, as relative static stiffness is going to have a relationship with time as we saw in @fig-Figure1. We also see that relative porosity and strain are correlated, as well as stress and strain.
 
-Lastly, we look at how frequency is related to relative static stiffness over time.
+Lastly, we look at how frequency is related to relative static stiffness over time. In @fig-freq-estaticRel, we can see that for lower frequencies, there is a higher relative static stiffness level recorded. This trend is the same across the different foam types. Frequency is a possible explanatory variable that we will consider in our final model.
 
 ```{r}
 #| echo: false
@@ -301,11 +300,12 @@ ggplot(df_clean, aes(x = log(Time), y = Estatic_rel, color = freq)) +
   theme_minimal()
 ```
 
-In @fig-freq-estaticRel, we can see that for lower frequencies, there is a higher relative static stiffness level recorded. This trend is the same across the different foam types. Frequency is a possible explanatory variable that we will consider in our final model.
 
 # 3. Statistical Analysis
 
 The linear mixed effects model is defined as:
+
+<!-- Write as $a_i + b_i \log(time) + \epsilon_i$, then $a_i = \alpha_0 + \cdots$ and $b_i = \beta_0 + \cdots$ -->
 
 \begin{align*}
 Estatic\_rel_{ij} &= \underbrace{\beta_0}_{\text{fixed intercept}} + \underbrace{a_j}_{\text{random intercept for SampleCode}} \\
@@ -319,19 +319,16 @@ where:
 $\beta_0$ is the fixed intercept $a_j \sim \mathcal{N}(0, \sigma^2_{SampleCode})$ is the random intercept for group $j$ (`SampleCode`) $\varepsilon_{ij} \sim \mathcal{N}(0, \sigma^2)$ is the residual error.
 
 ```{r}
+#| warning: false
+#| label: anova-stuff
 #| echo: false
-#| label: Model_pvalue
-#| warning: false 
-#| tab-cap: "Model Significance"
 
-
-
-st_stiff_model <- lmer( Estatic_rel ~  log(Time):Porosity*ChemIndex + freq +  Num_squish+  (log(Time)|SampleCode), data = df_clean)
-
-sum <- summary(st_stiff_model)
- 
-
+library(nlme)
+m1 <- lme(Estatic_rel ~ log(Time):Porosity*ChemIndex +  freq + Num_squish ,random=~1|SampleCode,data=df_clean)
+anova(m1)
 ```
+
+
 ```{r}
 #| warning: False
 #| label: tbl-sum
@@ -344,11 +341,12 @@ knitr::kable(sumtable)
 ```
 
 
-In our model we allowed for a random intercept so that each sample could have their own unique baseline and we allowed for the change that each sample would experience over time to vary uniquely. Looking at our fixed effects we can see that
-chemical index is not significant. Frequency is significant and has a negative relationship with relative static stiffness. We also saw that the more squishes a foam indured the lower the stiffnes became. Looking at the relationship between
-log(Time) and porosity for both levels of porosity the stiffness will decrease over time. Now the terms we were most interested in was the three way interaction terms between log(Time), Porosity, and Chemical Index. In R it assigned the baseline
-to be the interaction between log(Time), high porosity and low chemical index. Thus the estimates seen for the interaction terms are in relation to this baseline. We can see that all of these estimates are negative thus there static stiffness 
-decreases more over time in comparison to the baseline foam type. With the data being approximately normal from the central limit theorem, we determined anything with a t-value over $|2|$ to be significant. The t-values within the model all were significant and were kept within the final model. 
+In our model we allowed for a random intercept so that each sample could have their own unique baseline and we allowed for the change that each sample would experience over time to vary uniquely 
+<!-- This would be random slopes which aren't included -->
+. Looking at our fixed effects we can see that chemical index is not significant.
+<!-- Only discuss slope/interaction -->
+
+Frequency is significant and has a negative relationship with relative static stiffness. We also saw that the more squishes a foam indured the lower the stiffnes became. Looking at the relationship between log(Time) and porosity for both levels of porosity the stiffness will decrease over time. Now the terms we were most interested in was the three way interaction terms between log(Time), Porosity, and Chemical Index. In R it assigned the baseline to be the interaction between log(Time), high porosity and low chemical index. Thus the estimates seen for the interaction terms are in relation to this baseline. We can see that all of these estimates are negative thus there static stiffness  decreases more over time in comparison to the baseline foam type. With the data being approximately normal from the central limit theorem, we determined anything with a t-value over $|2|$ to be significant. The t-values within the model all were significant and were kept within the final model. 
 
 ```{r}
 #| echo: false
@@ -359,20 +357,22 @@ emmean <- emmeans(st_stiff_model,~ Porosity *  ChemIndex)
 plot(emmean)
 ```
 
+<!-- Of Slopes? -->
+
 @em-plot shows a 95% confidence interval the Relative Static Stiffness based on the unique combination of porosity and chemical index, after accounting for all other variables. This allows us to see if there are significant differences between the different foam types. The foam type with Hight Porosity and Low Chemical Index (79) has the highest stiffness while also having a small confidence interval. That means that it will maintain a high static stiffness and also not fluctuate too much. 
 
-```{r}
-#| warning: False
-#| label: tbl-emmeans
-#| echo: false
-#| tbl-cap: "Estimated Marginal Means for Static Stiffness."
+<!-- ```{r} -->
+<!-- #| warning: False -->
+<!-- #| label: tbl-emmeans -->
+<!-- #| echo: false -->
+<!-- #| tbl-cap: "Estimated Marginal Means for Static Stiffness." -->
 
-# Extract pairwise comparison results for both models
-pairs <- as.data.frame(emmeans(st_stiff_model, ~ ChemIndex * Porosity))
+<!-- # Extract pairwise comparison results for both models -->
+<!-- pairs <- as.data.frame(emmeans(st_stiff_model, ~ ChemIndex * Porosity)) -->
 
-# Generate the table using knitr::kable
-knitr::kable(pairs, col.names = c("ChemIndex", "Porosity", "emmean", "SE", "DF", "Lower Conf-Lvl", "Upper Conf-Lvl"))
-```
+<!-- # Generate the table using knitr::kable -->
+<!-- knitr::kable(pairs, col.names = c("ChemIndex", "Porosity", "emmean", "SE", "DF", "Lower Conf-Lvl", "Upper Conf-Lvl")) -->
+<!-- ```  UNNEEDED AFter picture-->
 
 
 # 4. Recommendations
@@ -382,6 +382,7 @@ knitr::kable(pairs, col.names = c("ChemIndex", "Porosity", "emmean", "SE", "DF",
 
 After performing our analysis we believe that the foam type that has a porosity of 81% and a chemical index of 79 will maintain the static stiffness the best over time.
  
+<!-- Does this match eda -->
 
 # 5. Resources
 
@@ -489,15 +490,6 @@ plot(st_stiff_model)
 ```
 
 
-```{r}
-#| warning: false
-#| label: anova-stuff
-#| echo: false
-
-library(nlme)
-m1 <- lme(Estatic_rel ~ log(Time):Porosity*ChemIndex +  freq + Num_squish ,random=~1|SampleCode,data=df_clean)
-anova(m1)
-```
 
 ### R Script
 
