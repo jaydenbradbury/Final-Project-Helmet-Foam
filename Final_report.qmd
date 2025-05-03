@@ -321,6 +321,13 @@ $u_i \sim N(0,\sigma_u^2)$,
 and
 $v_i \sim N(0, \sigma_v^2)$.
 
+$Estatic\_rel_{ij}$ is the relative static stiffness of the foam for the jth measurement of the ith foam sample. $a_i$ represents the sample-specific baseline stiffness for each sample. This essentially allows each sample to have its own unique intercept. Here we let the intercepts vary based on foam porosity, chemical index, frequency, and the number of squishes performed at the given time.
+$b_i \log(\text{Time}_{ij})$ is a term that allows the stiffness to change over time as time increases. Like $a_i$, $b_i$ allows each sample to have its own slope. The slopes also vary based on foam porosity, chemical index, frequency, and the number of squishes performed at the given time.
+$\epsilon_{ij}$ is the irreducible or random error.
+
+Using a mixed model like this allows us to account for both variations between all samples as well as the individual differences between foam samples.
+
+
 ```{r}
 #| warning: false
 #| label: anova-stuff
