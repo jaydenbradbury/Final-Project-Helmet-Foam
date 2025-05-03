@@ -327,20 +327,10 @@ $v_i \sim N(0, \sigma_v^2)$.
 #| echo: false
 
 library(nlme)
+st_stiff_model <- lmer(Estatic_rel ~ log(Time):Porosity*ChemIndex +  freq + Num_squish + (1|SampleCode), data=df_clean)
+
 m1 <- lme(Estatic_rel ~ log(Time):Porosity*ChemIndex +  freq + Num_squish ,random=~1|SampleCode,data=df_clean)
 anova(m1)
-```
-
-
-```{r}
-#| warning: False
-#| label: tbl-sum
-#| echo: false
-#| tbl-cap: "Summary Table of Estimates for Model"
-
-sumtable <- as.data.frame(sum$coefficients)
-
-knitr::kable(sumtable)
 ```
 
 
