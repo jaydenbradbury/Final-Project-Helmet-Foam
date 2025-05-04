@@ -145,7 +145,7 @@ df_clean <- df_clean %>%
 
 ## 1. Project Description
 
-Moira Foster was tasked with designing an experiment that measured helmet foam durability over long periods of time. The experiment contained three different chemical compositions of foam with two different porosity levels, to create six types of foam. Each of these foams were compressed at different frequencies, strains, and stresses over a period of time. Dr. Foster has hired **enter group name here.** to deterimine which foam type has the most consistent static stiffness over time with impact. The sample contains 71 different foam samples across the 6 combinations.
+Moira Foster was tasked with designing an experiment that measured helmet foam durability over long periods of time. The experiment contained three different chemical compositions of foam with two different porosity levels, to create six types of foam. Each of these foams were compressed at different frequencies, strains, and stresses over a period of time. Dr. Foster has hired Static Group to deterimine which foam type has the most consistent static stiffness over time with impact. The sample contains 71 different foam samples across the 6 combinations.
 
 ```{=html}
 <!--
@@ -164,10 +164,6 @@ Moira Foster was tasked with designing an experiment that measured helmet foam d
 **Question 1:** Which combination of porosity and chemical index is best to predict static stiffness over time after accounting for all other variables?
 
 ## 1.2 Variables
-
-*What is (are) possible explanatory and response variables? Relevant notes about how each is measured/recorded.*
-
-*A table is recommended here.*
 
 We created two new variables, a time variable that was calculated by taking the number of squishes performed on a foam sample in that current cycle and dividing it by the frequency of those squishes and a relative static stiffness variable. This was done by taking every measurement of static stiffness for a given foam sample and dividing it by the initial value of static stiffness for that foam sample. This helps with seeing how the static stiffness changes over time.
 
@@ -189,24 +185,9 @@ knitr::kable(variable.desc, format = "latex", booktabs = TRUE,
   add_header_above(c(" " = 3))
 ```
 
-```{=html}
-<!--
-*If design is complex, here is a good place to write a detailed description.*
--->
-```
 
 # 2. Exploratory Data Analysis (EDA)
 
-```{=html}
-<!--
-
-*Description of important variables.* - *summary statistics* - *missing Data* - *unusual or concerning observations*
-
-*Relevant summary figures that provide intuition for the research questions and/or inform important modeling decisions (correlation structure, etc).*
-
-*Describe important outcomes of the EDA that the reader should notice.*
--->
-```
 
 To explore what needs to be done for modeling, we perform some exploratory data analysis.
 
@@ -251,8 +232,7 @@ ggplot(df_clean, aes(x = ChemIndex, y = Estatic_rel, fill = ChemIndex)) +
   theme_minimal()
 ```
 
-In @fig-chem-poro, the relationship between chemical index and relative static stiffness is different for the two levels of foam porosity. This indicates that there is likely a significant interaction between chemical index and porosity. 
-<!-- Is this lvl 2 or 1 -->
+In @fig-chem-poro, the relationship between chemical index and relative static stiffness is different for the two levels of foam porosity. This indicates that there is likely a significant interaction between chemical index and porosity. These look at the level of foam, and not each individual sample, making it a level 2 response variable.
 
 Next, we look at a correlation plot between all numerical variables.
 
@@ -374,10 +354,8 @@ plot(emmean)
 
 **Question 1:** Which combination of porosity and chemical index is best at keeping static stiffness stable over time, after accounting for all other variables?
 
-After performing our analysis we believe that the foam type that has a porosity of 81% and a chemical index of 79 will maintain the static stiffness the best over time.
+After performing our analysis we believe that the foam type that has a porosity of 81% and a chemical index of 79 will maintain the static stiffness the best over time. This matches what we saw in our exploratory data analysis. 
  
-<!-- Does this match eda -->
-
 # 5. Resources
 
 *List resources that your client might find useful*
@@ -386,14 +364,12 @@ After performing our analysis we believe that the foam type that has a porosity 
 
 ## Study Design
 
-<<<<<<< HEAD
 
 ## Possible Outliers
 
   There existed possible outliers within the data that were included within the model. These extreme values are seen to be caused by machine errors in measurement recording. The extreme values had no significant impact on the model to predict static stiffness over time, but should be considered for other response variables. 
 =======
 ## 
->>>>>>> bc1cb2bda06f92582b232649520fc379d262e2ca
 
 -   *Limitations to the recommendations*
 
