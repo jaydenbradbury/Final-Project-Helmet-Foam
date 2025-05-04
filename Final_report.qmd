@@ -333,10 +333,10 @@ Using a mixed model like this allows us to account for both variations between a
 #| label: anova-stuff
 #| echo: false
 
-library(nlme)
-st_stiff_model <- lmer(Estatic_rel ~ log(Time):Porosity*ChemIndex +  freq + Num_squish + (1|SampleCode), data=df_clean)
+st_stiff_model<- lmer(Estatic_rel ~ log(Time):Porosity*ChemIndex + freq + Num_squish + (log(Time)|SampleCode), data = df_clean)
 
-m1 <- lme(Estatic_rel ~ log(Time):Porosity*ChemIndex +  freq + Num_squish ,random=~1|SampleCode,data=df_clean)
+library(nlme)
+m1 <- lme(Estatic_rel ~ log(Time):Porosity*ChemIndex +  freq + Num_squish ,random= ~log(Time)|SampleCode,data=df_clean)
 anova(m1)
 ```
 
