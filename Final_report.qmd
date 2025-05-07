@@ -258,7 +258,8 @@ corrplot(corr_matrix, method = "circle", type = "lower", tl.col = "black")
 
 @fig-correlation gives us a good idea of what variables might need to be included in our final model. As we can see, number of squishes and frequency are highly correlated with relative static stiffness. This is obvious, as relative static stiffness is going to have a relationship with time as we saw in @fig-Figure1. We also see that relative porosity and strain are correlated, as well as stress and strain.
 
-Lastly, we look at how frequency is related to relative static stiffness over time. In @fig-freq-estaticRel, we can see that for lower frequencies, there is a higher relative static stiffness level recorded. This trend is the same across the different foam types. Frequency is a possible explanatory variable that we will consider in our final model.
+Lastly, we look at how frequency is 
+related to relative static stiffness over time. In @fig-freq-estaticRel, we can see that for lower frequencies, there is a higher relative static stiffness level recorded. This trend is the same across the different foam types. Frequency is a possible explanatory variable that we will consider in our final model.
 
 ```{r}
 #| echo: false
@@ -296,10 +297,24 @@ b_i = \beta_0 + \beta_1\text{Porosity}_i + \beta_2 \text{ChemIndex}_i + \beta_3\
 \end{align*}
 
 where:
-$\epsilon_{ij} \sim N(0, \sigma_{\epsilon}^2)$,
-$u_i \sim N(0,\sigma_u^2)$,
-and
-$v_i \sim N(0, \sigma_v^2)$.
+$\epsilon_{ij} \sim N_(0, \sigma_{\epsilon}^2)$,
+\begin{align*}
+\begin{pmatrix}
+u_i \\
+v_i
+\end{pmatrix}
+&\sim \mathcal{N}\left(
+\begin{pmatrix}
+0 \\
+0
+\end{pmatrix},
+\begin{pmatrix}
+\sigma_u^2 & \rho\sigma_u\sigma_v \\
+\rho\sigma_u\sigma_v & \sigma_v^2
+\end{pmatrix}
+\right) \\
+\epsilon_{ij} &\sim \mathcal{N}(0, \sigma_\epsilon^2)
+\end{align*}
 
 $Estatic\_rel_{ij}$ is the relative static stiffness of the foam for the jth measurement of the ith foam sample. $a_i$ represents the sample-specific baseline stiffness for each sample. This essentially allows each sample to have its own unique intercept. Here we let the intercepts vary based on foam porosity, chemical index, frequency, and the number of squishes performed at the given time.
 $b_i \log(\text{Time}_{ij})$ is a term that allows the stiffness to change over time as time increases. Like $a_i$, $b_i$ allows each sample to have its own slope. The slopes also vary based on foam porosity, chemical index, frequency, and the number of squishes performed at the given time.
@@ -358,11 +373,9 @@ After performing our analysis we believe that the foam type that has a porosity 
  
 # 5. Resources
 
-*List resources that your client might find useful*
+For more information on mixed models: "Beyond Multiple Linear Regression: Applied Generalized Linear Models And Multilevel Models in R" by Paul Roback and Julie Legler
 
 # 6. Additional Considerations
-
-## Study Design
 
 
 ## Possible Outliers
