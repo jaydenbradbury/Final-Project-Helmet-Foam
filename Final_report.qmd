@@ -1,5 +1,5 @@
 ---
-title: "Final_Report"
+title: "Final Report"
 author: "Jayden Bradbury, Alex Jacoby, Jayden Thieman, Molly Wolf"
 format: pdf
 editor: visual
@@ -161,7 +161,7 @@ Moira Foster was tasked with designing an experiment that measured helmet foam d
 
 ## 1.1 Research Questions
 
-**Question 1:** Which combination of porosity and chemical index is best to predict static stiffness over time after accounting for all other variables?
+**Research Question:** Which combination of porosity and chemical index is best at maintaining static stiffness over time, after accounting for all other variables?
 
 ## 1.2 Variables
 
@@ -199,6 +199,7 @@ To explore what needs to be done for modeling, we perform some exploratory data 
 #| fig-align: "center"
 #| fig-width: 6
 #| fig-height: 3
+#| fig-pos: "H"
 
 ggplot(df_clean, aes(x = log(Time), y = Estatic_rel, group = SampleCode)) +
   geom_smooth(alpha = 0.3) +
@@ -221,6 +222,7 @@ ggplot(df_clean, aes(x = log(Time), y = Estatic_rel, group = SampleCode)) +
 #| fig-align: "center"
 #| fig-width: 6
 #| fig-height: 3
+#| fig-pos: "H"
 
 
 ggplot(df_clean, aes(x = ChemIndex, y = Estatic_rel, fill = ChemIndex)) +
@@ -244,6 +246,7 @@ Next, we look at a correlation plot between all numerical variables.
 #| fig-align: "center"
 #| fig-width: 8
 #| fig-height: 4
+#| fig-pos: "H"
 
 
 df_numeric <- df_clean %>%
@@ -259,7 +262,7 @@ corrplot(corr_matrix, method = "circle", type = "lower", tl.col = "black")
 @fig-correlation gives us a good idea of what variables might need to be included in our final model. As we can see, number of squishes and frequency are highly correlated with relative static stiffness. This is obvious, as relative static stiffness is going to have a relationship with time as we saw in @fig-Figure1. We also see that relative porosity and strain are correlated, as well as stress and strain.
 
 Lastly, we look at how frequency is 
-related to relative static stiffness over time. In @fig-freq-estaticRel, we can see that for lower frequencies, there is a higher relative static stiffness level recorded. This trend is the same across the different foam types. Frequency is a possible explanatory variable that we will consider in our final model.
+related to relative static stiffness over time. 
 
 ```{r}
 #| echo: false
@@ -269,6 +272,7 @@ related to relative static stiffness over time. In @fig-freq-estaticRel, we can 
 #| fig-align: "center"
 #| fig-width: 6
 #| fig-height: 3
+#| fig-pos: "H"
 ggplot(df_clean, aes(x = log(Time), y = Estatic_rel, color = freq)) +
   geom_line(aes(group = SampleCode), alpha = 0.7, linewidth = 1.5) +
   facet_grid(Porosity ~ ChemIndex) +
@@ -281,6 +285,7 @@ ggplot(df_clean, aes(x = log(Time), y = Estatic_rel, color = freq)) +
   theme_minimal()
 ```
 
+In @fig-freq-estaticRel, we can see that for lower frequencies, there is a higher relative static stiffness level recorded. This trend is the same across the different foam types. Frequency is a possible explanatory variable that we will consider in our final model.
 
 # 3. Statistical Analysis
 
@@ -290,10 +295,10 @@ The linear mixed effects model is defined as:
 Estatic\_rel_{ij} = a_i + b_j \log(Time_{ij}) + \epsilon_{ij}
 \end{align*}
 \begin{align*}
-a_i = \alpha_0 + \alpha_1\text{Porosity}_i + \alpha_2 \text{ChemIndex}_i + \alpha_3\text{Frequency}_i + \alpha_4 \text{NumberOfSquishes}_i + u_i
+a_i = \alpha_0 + \alpha_1\text{Porosity}_i \cdot \text{ChemIndex}_i + \alpha_2\text{Frequency}_i + \alpha_3 \text{NumberOfSquishes}_i + u_i
 \end{align*}
 \begin{align*}
-b_i = \beta_0 + \beta_1\text{Porosity}_i + \beta_2 \text{ChemIndex}_i + \beta_3\text{Frequency}_i + \beta_4 \text{NumberOfSquishes}_i + v_i
+b_i = \beta_0 + \beta_1\text{Porosity}_i \cdot \text{ChemIndex}_i + \beta_2\text{Frequency}_i + \beta_3 \text{NumberOfSquishes}_i + v_i
 \end{align*}
 
 where:
@@ -339,16 +344,19 @@ Frequency is significant and has a negative relationship with relative static st
 
 ```{r}
 #| echo: false
-#| label: em-plot
+#| label: em-means-plot
 #| warning: false
 #| fig-cap: "Emmeans Comparison by Porosity*ChemIndex"
+#| fig-pos: "H"
+
+
 emmean <- emmeans(st_stiff_model,~ Porosity *  ChemIndex)
 plot(emmean)
 ```
 
 <!-- Of Slopes? -->
 
-@em-plot shows a 95% confidence interval the Relative Static Stiffness based on the unique combination of porosity and chemical index, after accounting for all other variables. This allows us to see if there are significant differences between the different foam types. The foam type with Hight Porosity and Low Chemical Index (79) has the highest stiffness while also having a small confidence interval. That means that it will maintain a high static stiffness and also not fluctuate too much. 
+@em-means-plot shows a 95% confidence interval the Relative Static Stiffness based on the unique combination of porosity and chemical index, after accounting for all other variables. This allows us to see if there are significant differences between the different foam types. The foam type with Hight Porosity and Low Chemical Index (79) has the highest stiffness while also having a small confidence interval. That means that it will maintain a high static stiffness and also not fluctuate too much. 
 
 <!-- ```{r} -->
 <!-- #| warning: False -->
@@ -366,8 +374,7 @@ plot(emmean)
 
 # 4. Recommendations
 
-
-**Question 1:** Which combination of porosity and chemical index is best at keeping static stiffness stable over time, after accounting for all other variables?
+**Research Question:** Which combination of porosity and chemical index is best at maintaining static stiffness over time, after accounting for all other variables?
 
 After performing our analysis we believe that the foam type that has a porosity of 81% and a chemical index of 79 will maintain the static stiffness the best over time. This matches what we saw in our exploratory data analysis. 
  
@@ -377,23 +384,13 @@ For more information on mixed models: "Beyond Multiple Linear Regression: Applie
 
 # 6. Additional Considerations
 
+There existed possible outliers within the data that were included within the model. These extreme values are seen to be caused by machine errors in measurement recording. The extreme values had no significant impact on the model to predict static stiffness over time, but should be considered for other response variables. 
 
-## Possible Outliers
-
-  There existed possible outliers within the data that were included within the model. These extreme values are seen to be caused by machine errors in measurement recording. The extreme values had no significant impact on the model to predict static stiffness over time, but should be considered for other response variables. 
-=======
-## 
-
--   *Limitations to the recommendations*
-
-  Since some of the samples are smaller the results may be less gernalizable. Controlled lab conditions may lead to different long-term performance than real world applications.
+Since some of the samples are smaller the results may be less gernalizable. Controlled lab conditions may lead to different long-term performance than real world applications.
   
--   *Concerns you may have about the study; suggestions for similar studies in future*
-
-  Make time consistent for each cycle and sample. Equal or greater sample sizes. Expand the types of chemical indexes and porosities involved in the experiment.
+Make time consistent for each cycle and sample. Equal or greater sample sizes. Expand the types of chemical indexes and porosities involved in the experiment.
   
--   *Technical comments*
-  May be better to use time-based response modeling instead of comparing cycles focus on set time periods. Multiple imputation or mixed-effects models would strengthen results from later-cycle data where values are missing non-randomly.
+May be better to use time-based response modeling instead of comparing cycles focus on set time periods. Multiple imputation or mixed-effects models would strengthen results from later-cycle data where values are missing non-randomly.
 
 # Technical Appendix
 
@@ -411,6 +408,7 @@ For more information on mixed models: "Beyond Multiple Linear Regression: Applie
 #| fig-align: "center"
 #| fig-width: 6
 #| fig-height: 3
+#| fig-pos: "H"
 
 
 ggplot(df_clean, aes(x = Time, y = Estatic_rel)) +
@@ -433,6 +431,7 @@ Here we can see a clear nonlinear relationship between relative static stiffness
 #| fig-align: "center"
 #| fig-width: 6
 #| fig-height: 3
+#| fig-pos: "H"
 
 
 ggplot(df_clean, aes(x = log(Time), y = Estatic_rel)) +
@@ -476,7 +475,7 @@ plot(st_stiff_model)
 
 ### R Script
 
-```{r ref.label=c('front-matter', 'tbl-variables', 'fig-Figure1', 'fig-chem-poro', 'fig-correlation', 'fig-freq-estaticRel', 'Model-pvalue', 'em-plot', 'fig-estatRel-time','fig-estatRel-logTime', 'diag-plots', 'anova-stuff' )}
+```{r ref.label=c('front-matter', 'tbl-variables', 'fig-Figure1', 'fig-chem-poro', 'fig-correlation', 'fig-freq-estaticRel', 'Model-pvalue', 'em--means-plot', 'fig-estatRel-time','fig-estatRel-logTime', 'diag-plots', 'anova-stuff' )}
 #| echo: true
 #| eval: false
 
